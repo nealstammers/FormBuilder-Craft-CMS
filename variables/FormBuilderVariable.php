@@ -13,4 +13,9 @@ class FormBuilderVariable
     return craft()->formBuilder_forms->getFormByHandle($formHandle);
   }
 
+  function getFormById($formId)
+  {
+    return craft()->formBuilder_forms->getFormById($formId);
+  }
+
 }
