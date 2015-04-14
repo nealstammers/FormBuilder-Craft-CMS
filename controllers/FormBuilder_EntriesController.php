@@ -121,11 +121,11 @@ class FormBuilder_EntriesController extends BaseController
 
 
 			if ($sendRegNotification) {
-				$this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
-			}
+        $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
+      }
 
-			// Time to make the notifications
-			if ($this->_sendEmailNotification($formBuilderEntry, $form)) {
+      // Time to make the notifications
+      if ($this->_sendEmailNotification($formBuilderEntry, $form)) {
 				// Set the message
 				if (!empty($form->successMessage)) {
 					$message = $form->successMessage;

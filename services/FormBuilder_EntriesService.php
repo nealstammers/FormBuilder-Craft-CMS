@@ -128,7 +128,6 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		$errors = false;
 
 		$email = new EmailModel();
-
 		$email->fromEmail = $form->toEmail;
 		$email->replyTo   = $form->toEmail;
 		$email->fromName  = 'Submission Notification';
