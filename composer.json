@@ -1,10 +1,13 @@
 {
     "name": "roundhouse/formbuilder",
     "description": "Form builder for craft cms.",
+    "license": "MIT",
     "authors": [
         {
             "name": "Vadim Goncharov",
-            "email": "vadim@owl-design.net"
+            "email": "vadim@owl-design.net",
+            "homepage": "http://owl-design.net",
+            "role": "Developer"
         }
     ],
     "type": "craft-plugin",
