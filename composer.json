@@ -1,0 +1,12 @@
+{
+    "name": "roundhouse/formbuilder",
+    "description": "Form builder for craft cms.",
+    "authors": [
+        {
+            "name": "Vadim Goncharov",
+            "email": "vadim@owl-design.net"
+        }
+    ],
+    "type": "craft-plugin",
+    "require": {}
+}
