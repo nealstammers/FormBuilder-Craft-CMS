@@ -92,7 +92,8 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 	 * 
 	 */
 	public function sendEmailNotification($form, $message, $html = true, $email = null)
-	{
+	{	
+
 		// Generic errors bool
 		$errors = false;
 
@@ -127,17 +128,17 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		// Generic errors bool
 		$errors = false;
 
+		// If form sending to multiple emails, only first one will be picked as the replyTo/fromEmail
+		$emailTo = explode(',', $form->toEmail);
+
 		$email = new EmailModel();
-		$email->fromEmail = $form->toEmail;
-		$email->replyTo   = $form->toEmail;
+		$email->toEmail   = $form->yourEmail;
+		$email->fromEmail = $emailTo[0];
+		$email->replyTo   = $emailTo[0];
 		$email->fromName  = 'Submission Notification';
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
 
-		// Support for sending multiple emails
-		$emailTo = $form->yourEmail;
-
-		$email->toEmail = trim($emailTo);
 		if (!craft()->email->sendEmail($email)) {
 			$errors = true;
 		}

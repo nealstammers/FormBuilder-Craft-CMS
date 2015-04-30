@@ -116,11 +116,11 @@ class FormBuilder_EntriesController extends BaseController
 			}
 		}
 
-		// Save entry to database
-		if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
+    // Save entry to database
+    if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
 
-			if ($sendRegNotification) {
+      if ($sendRegNotification) {
         $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
       }
 
@@ -171,7 +171,8 @@ class FormBuilder_EntriesController extends BaseController
 	 * Send Email Notification
 	 */
 	protected function _sendEmailNotification($record, $form)
-	{
+	{  
+
 		// Put in work setting up data for the email template.
 		$data = new \stdClass($data);
 		$data->entryId   = $record->id;
@@ -242,12 +243,12 @@ class FormBuilder_EntriesController extends BaseController
 
 		$message  = craft()->templates->render($template, $variables);
 
-		// Send notification to form owner
-		if (craft()->formBuilder_entries->sendRegistrantEmailNotification($form, $message, true, null)) {
-			return true;
-		} else {
-			return false;
-		}
+    // Send notification to form owner
+    if (craft()->formBuilder_entries->sendRegistrantEmailNotification($form, $message, true, null)) {
+      return true;
+    } else {
+      return false;
+    }
 
 	}
 
