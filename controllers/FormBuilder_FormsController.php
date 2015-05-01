@@ -10,6 +10,7 @@ class FormBuilder_FormsController extends BaseController
 	{	
 		$variables['forms'] = craft()->formBuilder_forms->getAllForms();
 		$variables['tabs'] = $this->_getTabs();
+
 		return $this->renderTemplate('formbuilder/forms', $variables);
 	}
 

@@ -1,5 +1,6 @@
 <?php
 namespace Craft;
+// http://buildwithcraft.com/docs/plugins/field-types
 
 class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 {
@@ -14,8 +15,19 @@ class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 	 */
 	public function getName()
 	{
-		return Craft::t('FormBuilder Forms');
+		return Craft::t('Submitter Email Field');
 	}
+
+	/**
+   * Get this fieldtype's column type.
+   *
+   * @return mixed
+   */
+  public function defineContentAttribute()
+  {
+    // "Mixed" represents a "text" column type, which can be used to store arrays etc.
+    return AttributeType::Mixed;
+  }
 
 	/**
 	 * @inheritDoc IFieldType::getInputHtml()
@@ -27,26 +39,24 @@ class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
+		$oldPath = craft()->path->getTemplatesPath();
+		$newPath = craft()->path->getPluginsPath().'formBuilder/templates';
+		craft()->path->setTemplatesPath($newPath);
+		$html = craft()->templates->render('/fields/notifieremail', array(
+      'name'  => 'yourEmail',
+      'value' => 'yourEmail'
+    ));
+		craft()->path->setTemplatesPath($oldPath);
 
-		$allForms = craft()->formBuilder_forms->getAllForms();
-
-		$options = array();
-
-		foreach ($allForms as $form)
-		{
-			$options[$form->id] = array(
-				'label' => $form->name,
-				'value' => $form->id
-			);
-		}
-
-		return craft()->templates->render('_includes/forms/select', array(
-			'name'    => $name,
-			'value'   => $value,
-			'options' => $options
-		));
-
+		return $html;
 	}
+
+	protected function defineSettings()
+  {
+    return array(
+      'test' => array(AttributeType::Mixed),
+    );
+  }
 
 	/**
 	 * @inheritDoc BaseElementFieldType::getSettingsHtml()
@@ -55,6 +65,9 @@ class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 	 */
 	public function getSettingsHtml()
 	{
+		// return craft()->templates->render('/fields/settings', array(
+  //     'settings' => $this->getSettings()
+  //   ));
 		return false;
 	}
 
@@ -69,6 +82,6 @@ class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 	 */
 	protected function getOptionsSettingsLabel()
 	{
-		return Craft::t('FormBuilder Options');
+		return Craft::t('Field Settings');
 	}
 }
