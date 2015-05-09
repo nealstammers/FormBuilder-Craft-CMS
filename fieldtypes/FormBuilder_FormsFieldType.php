@@ -19,14 +19,37 @@ class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 	}
 
 	/**
-   * Get this fieldtype's column type.
+   * @inheritDoc IFieldType::defineContentAttribute()
    *
    * @return mixed
    */
   public function defineContentAttribute()
   {
-    // "Mixed" represents a "text" column type, which can be used to store arrays etc.
-    return AttributeType::Mixed;
+    $maxLength = $this->getSettings()->maxLength;
+
+    if (!$maxLength)
+    {
+      $columnType = ColumnType::Text;
+    }
+    // TODO: MySQL specific
+    else if ($maxLength <= 255)
+    {
+      $columnType = ColumnType::Varchar;
+    }
+    else if ($maxLength <= 65535)
+    {
+      $columnType = ColumnType::Text;
+    }
+    else if ($maxLength <= 16777215)
+    {
+      $columnType = ColumnType::MediumText;
+    }
+    else
+    {
+      $columnType = ColumnType::LongText;
+    }
+
+    return array(AttributeType::String, 'column' => $columnType, 'maxLength' => $maxLength);
   }
 
 	/**
@@ -44,34 +67,42 @@ class FormBuilder_FormsFieldType extends BaseOptionsFieldType
 		craft()->path->setTemplatesPath($newPath);
 		$html = craft()->templates->render('/fields/notifieremail', array(
       'name'  => 'yourEmail',
-      'value' => 'yourEmail'
+      'value' => 'yourEmail',
+      'settings' => $this->getSettings()
     ));
 		craft()->path->setTemplatesPath($oldPath);
 
 		return $html;
 	}
 
+
+  /**
+   * @inheritDoc ISavableComponentType::getSettingsHtml()
+   *
+   * @return string|null
+   */
+  public function getSettingsHtml()
+  {
+    return craft()->templates->render('_components/fieldtypes/PlainText/settings', array(
+      'settings' => $this->getSettings()
+    ));;
+  }
+
+
+  /**
+   * @inheritDoc BaseSavableComponentType::defineSettings()
+   *
+   * @return array
+   */
 	protected function defineSettings()
   {
     return array(
-      'test' => array(AttributeType::Mixed),
+      'placeholder'   => array(AttributeType::String),
+      'multiline'     => array(AttributeType::Bool),
+      'initialRows'   => array(AttributeType::Number, 'min' => 1, 'default' => 4),
+      'maxLength'     => array(AttributeType::Number, 'min' => 0),
     );
   }
-
-	/**
-	 * @inheritDoc BaseElementFieldType::getSettingsHtml()
-	 *
-	 * @return string|null
-	 */
-	public function getSettingsHtml()
-	{
-		// return craft()->templates->render('/fields/settings', array(
-  //     'settings' => $this->getSettings()
-  //   ));
-		return false;
-	}
-
-
 	// Protected Methods
 	// =========================================================================
 
