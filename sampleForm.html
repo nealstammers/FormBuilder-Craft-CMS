@@ -1,10 +1,12 @@
 {% extends "_layout" %}
-{% import "_includes/forms" as forms %}
 
-{% set form = craft.formBuilder.getFormByHandle('subscriptionForm') %}
-{% set fields = form.fieldLayout.getFieldLayout().getFields() %}
+{% set form = craft.formBuilder.getFormByHandle('contactForm') %}
+{% set tabs = form.fieldLayout.getFieldLayout().getTabs() %}
+
+{% import '_includes/forms.twig' as forms %}
 
 {% block content %}
+
 <div class="container">
 
 {# Error handling #}
@@ -31,23 +33,50 @@
   <input type="hidden" name="redirect" value="/">
   <input type="hidden" name="formHandle" value="{{form.handle}}">
   <input type="hidden" name="formHoneypot" value="">
-  <input type="hidden" name="required[yourEmail]" value="Please enter your email">
-
   
-  {# Email Address #}
-  {{forms.textField({
-    label:  "Email Address"|t,
-    name:   "yourEmail",
-    id:     "yourEmail",
-    value:  form.yourEmail is defined ? form.yourEmail : '',
-  })  }}
 
-  {% for field in fields %}
-    {% include "_includes/field" with {
-      field: craft.fields.getFieldById(field.fieldId),
-      required: field.required,
-    } only %}
+  {% for tab in tabs %}
+    {% set fields = tab.getFields() %}
+    
+    <fieldset class="{{loop.index}}">
+      <legend>{{ tab.name }}</legend>
+
+      {% for field in fields %}
+
+        {# {{ field | inspect }} #}
+
+        {# {%
+          set param = {  
+            label: f.name,  
+            labelClass: f.handle,  
+            size: attribute(f.settings, 'maxLength') is defined ? f.settings['maxLength'] : '',  
+            placeholder: attribute(f.settings, 'placeholder') is defined ? f.settings['placeholder'] : '',  
+            description: f.instructions,
+            fieldid: f.handle,
+            value: '',
+            required: field.required
+          }  
+        %}
+        {{ forms.input('name', f.type, param) }}  #}
+        
+
+
+
+        {% include "_fields/field.twig" with {
+          field: craft.fields.getFieldById(field.fieldId),
+          required: field.required,
+        } only %}
+
+
+
+
+
+      {% endfor %} 
+
+    </fieldset>
+
   {% endfor %}
+
 
   <button type="submit">
     Submit Message
