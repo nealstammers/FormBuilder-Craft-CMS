@@ -28,6 +28,7 @@ class FormBuilder_FormModel extends BaseModel
 			'yourEmail'    														=> AttributeType::String,
 			'notifyRegistrant'      									=> AttributeType::Bool,
 			'notificationTemplatePathRegistrant'      => AttributeType::String,
+			'notificationFieldHandleName'      				=> AttributeType::String,
 			'notificationTemplatePath'      					=> AttributeType::String,
 			'fieldLayoutId' 													=> AttributeType::Number,
 		);

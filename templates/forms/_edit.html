@@ -18,6 +18,7 @@
 {% endset %}
 
 {% block content %}
+	<h1>Form Settings</h1>
 	<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 		<input type="hidden" name="action" value="formBuilder/forms/saveForm">
 		<input type="hidden" name="redirect" value="formbuilder/forms">
@@ -69,32 +70,7 @@
 			errors: form.getErrors('subject'),
 			required: false
 		}) }}
-
-		{{ forms.checkboxField({
-			label: "Notify Registrant?"|t,
-			instructions: "Should the form send notification to registrant? Note: you must include custom email field in your form for this to work."|t,
-			id: 'notifyRegistrant',
-			class: 'notifyRegistrant',
-			name: 'notifyRegistrant',
-			value: 1,
-			checked: form.notifyRegistrant,
-			errors: form.getErrors('notifyRegistrant'),
-			required: false
-		}) }}
 		
-		<div class="registrantEmailTemplate" style="width: 100%;">
-		{{ forms.textField({
-			label: "Registrant Email Template Path"|t,
-			instructions: "Enter Email Template Path for Registrant. default 'formbuilder/email/registrant'"|t,
-			id: 'notificationTemplatePathRegistrant',
-			class: 'notificationTemplatePathRegistrant',
-			name: 'notificationTemplatePathRegistrant',
-			value: form.notificationTemplatePathRegistrant ? form.notificationTemplatePathRegistrant : "formbuilder/email/registrant"|t,
-			errors: form.getErrors('notificationTemplatePathRegistrant'),
-			required: true
-		}) }}
-		</div>
-
 		{{ forms.textField({
 			label: "Email Template Path"|t,
 			instructions: "Enter Email Template Path. default 'formbuilder/email/default'"|t,
@@ -105,12 +81,62 @@
 			errors: form.getErrors('notificationTemplatePath'),
 			required: true
 		}) }}
+		
+		{% if form.id %}
+
+			{% set formId = craft.formBuilder.getFormById(form.id) %}
+			{% set fields = formId.fieldLayout.getFieldLayout().getFields() %}
+			{% set groupOptions = [] %}
+			{% for field in fields %}
+				{% set item = field.getField(field) %}
+				{% set groupOptions = groupOptions|merge([{ label: item.name, value: item.handle }]) %}
+			{% endfor %}
+
+			<hr>
+			{{ forms.checkboxField({
+				label: "Notify Registrant?"|t,
+				instructions: "Should the form send notification to registrant?"|t,
+				id: 'notifyRegistrant',
+				class: 'notifyRegistrant',
+				name: 'notifyRegistrant',
+				value: 1,
+				checked: form.notifyRegistrant,
+				errors: form.getErrors('notifyRegistrant'),
+				required: false
+			}) }}
+			
+			<div class="registrantEmailTemplate" style="width: 100%;">
+			{{ forms.textField({
+				label: "Registrant Email Template Path"|t,
+				instructions: "Enter Email Template Path for Registrant. default 'formbuilder/email/registrant'"|t,
+				id: 'notificationTemplatePathRegistrant',
+				class: 'notificationTemplatePathRegistrant',
+				name: 'notificationTemplatePathRegistrant',
+				value: form.notificationTemplatePathRegistrant ? form.notificationTemplatePathRegistrant : "formbuilder/email/registrant"|t,
+				errors: form.getErrors('notificationTemplatePathRegistrant'),
+				required: true
+			}) }}
+			
+			{% if fields %}
+			{{ forms.selectField ({
+				label: "Notification Field"|t,
+				instructions: "Which field should we use to send out notification email? Note: field must first be added to the field layout below and saved."|t,
+				id: 'notificationFieldHandleName',
+				class: 'notificationFieldHandleName',
+				name: 'notificationFieldHandleName',
+				options: groupOptions ? groupOptions : '',
+				value: form.notificationFieldHandleName ? form.notificationFieldHandleName : groupOptions,
+				required: true
+			}) }}
+			{% endif %}
+		{% endif %}
+		</div>
 
 		<hr>
 
 		{% include "_includes/fieldlayoutdesigner" with {
 			fieldLayout: form.getFieldLayout(),
-			customizableTabs: true,
+			customizableTabs: true
 		} only %}
 
 		<hr>
@@ -118,6 +144,7 @@
 		<div class="buttons">
 			<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
 		</div>
+
 	</form>
 {% endblock %}
 

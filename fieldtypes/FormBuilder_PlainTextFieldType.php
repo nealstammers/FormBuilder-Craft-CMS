@@ -11,7 +11,7 @@ namespace Craft;
  * @package   craft.app.fieldtypes
  * @since     1.0
  */
-class PlainTextFieldType extends BaseFieldType
+class FormBuilder_PlainTextFieldType extends BaseFieldType
 {
   // Public Methods
   // =========================================================================
@@ -23,7 +23,7 @@ class PlainTextFieldType extends BaseFieldType
    */
   public function getName()
   {
-    return Craft::t('Plain Text');
+    return Craft::t('| FormBuilder | Plain Text');
   }
 
   /**
@@ -33,9 +33,11 @@ class PlainTextFieldType extends BaseFieldType
    */
   public function getSettingsHtml()
   {
-    return craft()->templates->render('_components/fieldtypes/PlainText/settings', array(
+    $settings = craft()->templates->render('_components/fieldtypes/PlainText/settings', array(
       'settings' => $this->getSettings()
     ));
+
+    return $settings;
   }
 
   /**
@@ -47,12 +49,9 @@ class PlainTextFieldType extends BaseFieldType
   {
     $maxLength = $this->getSettings()->maxLength;
 
-    if (!$maxLength)
-    {
+    if (!$maxLength) {
       $columnType = ColumnType::Text;
-    }
-    else
-    {
+    } else {
       $columnType = DbHelper::getTextualColumnTypeByContentLength($maxLength);
     }
 
@@ -69,11 +68,26 @@ class PlainTextFieldType extends BaseFieldType
    */
   public function getInputHtml($name, $value)
   {
-    return craft()->templates->render('_components/fieldtypes/PlainText/input', array(
-      'name'     => $name,
-      'value'    => $value,
-      'settings' => $this->getSettings()
+    // Variables
+    $fieldId      = $name->id;
+    $required     = $name->required;
+    $instructions = $name->instructions;
+
+    // Namespace our field id
+    $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
+
+    craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
+    $html = craft()->templates->render('_components/fieldtypes/PlainText/input', array(
+      'id'            => $id,
+      'name'          => $name,
+      'instructions'  => $instructions,
+      'value'         => $value,
+      'required'      => $required,
+      'settings'      => $this->getSettings()
     ));
+    craft()->path->setTemplatesPath(craft()->path->getTemplatesPath());
+
+    return $html;
   }
 
   // Protected Methods

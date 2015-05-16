@@ -2,7 +2,8 @@
 namespace Craft;
 
 class FormBuilder_FormsService extends BaseApplicationComponent
-{
+{	
+	public $types;
 	private $_allFormIds;
 	private $_formsById;
 	private $_fetchedAllForms = false;
@@ -130,6 +131,7 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		$formRecord->subject    													= $form->subject;
 		$formRecord->notifyRegistrant    									= $form->notifyRegistrant;
 		$formRecord->notificationTemplatePathRegistrant		= $form->notificationTemplatePathRegistrant;
+		$formRecord->notificationFieldHandleName					= $form->notificationFieldHandleName;
 		$formRecord->notificationTemplatePath							= $form->notificationTemplatePath;
 
 		$formRecord->validate();

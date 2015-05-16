@@ -3,6 +3,10 @@ namespace Craft;
 
 class FormBuilderVariable
 {
+
+  protected $inputJsClass;
+
+
 	function entries()
 	{
 		return craft()->elements->getCriteria('FormBuilder_Entry');
@@ -19,74 +23,28 @@ class FormBuilderVariable
   }
 
 
-
-
-
-  // function pluginPath($name, $criteria)
-  // {
-  //   craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
-
+  /**
+   * Returns the field's input HTML.
+   *
+   * @param string $field
+   *
+   * @return string
+   */
+  function getInputHtml($field) 
+  {
     
+    $theField = craft()->fields->getFieldById($field->fieldId); // Get the field
+    $fieldType = $theField->getFieldType(); // Get fieldtype
+    $requiredField = $field->required; // Get Required Field
+    $theField->required = $requiredField; // Add Required Value to Field if true
 
-  //   $variables = $this->getInputTemplateVariables($name, $criteria);
-  //   return craft()->templates->render($this->inputTemplate, $variables);
+    //
+    // UPDATE TEMPLATE PATHS
+    //
+    craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates'); // Change template path to FormBuilder
+    $getPluginInputHtml = $fieldType->getInputHtml($theField, null); // Load our input html 
+    craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath()); // Reset tempalte path to Craft
 
-
-
-
-  //   $template = craft()->templates->render('_fields/fields/text', ['text']);
-
-
-  //   craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-
-  //   return $template;
-  // }
-
-
-
-
-
-
-  function getInputHtml($field) {
-
-    // Field
-    $theField = craft()->fields->getFieldById($field->fieldId);
-
-    // Get Required Field
-    $requiredField = $field->required;
-
-    // Add Required Value to Field if true
-    $theField->required = $requiredField;
-
-    // Namespace our field id
-    $namespacedId = craft()->templates->namespaceInputId($field->fieldId, 'field');
-
-    // Populate FieldModel
-    // $fieldType = craft()->fields->populateFieldType($theField, null);
-    $fieldType = craft()->fields->populateFieldType($theField, null);
-    $input = $fieldType->getInputHtml($theField, null);
-
-
-    // {% set input = fieldtype.getInputHtml(field.handle, value) %}
-
-
-
-    // Render and return the input template
-    // return craft()->templates->render('formBuilder/_fields/field', array(
-    //   'field'         => $name,
-    //   'id'           => $id,
-    //   'namespacedId' => $namespacedId,
-    //   'value'        => $value
-    // ));
-
-    return $fieldType;
+    return $getPluginInputHtml;
   }
-
-  function inputHtml($fieldHandle, $value = null) {
-    return $fieldHandle;
-  }
-
-
-
-
 }

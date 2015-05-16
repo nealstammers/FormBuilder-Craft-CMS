@@ -28,6 +28,12 @@
   toggle: 'initialRowsContainer'
 }) }}
 
+{{ forms.checkboxField({
+  label: "Set Required?"|t,
+  name: 'required',
+  checked: settings.required
+}) }}
+
 
 <div id="initialRowsContainer" class="nested-fields{% if not settings.multiline %} hidden{% endif %}">
   {{ forms.textField({

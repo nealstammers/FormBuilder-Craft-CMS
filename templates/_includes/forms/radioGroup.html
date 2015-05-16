@@ -1,5 +1,9 @@
 {%- set options = (options is defined ? options : []) %}
+{%- set label = (name is defined ? name: null) %}
+{%- set instructions = (instructions is defined ? instructions : null) %}
 {%- set value = (value is defined ? value : null) %}
+{%- set warning = (warning is defined ? warning : null) %}
+{%- set errors = (errors is defined ? errors : null) -%}
 
 {%- for key, option in options %}
 	{%- set optionLabel = (option.label is defined ? option.label : option) %}
