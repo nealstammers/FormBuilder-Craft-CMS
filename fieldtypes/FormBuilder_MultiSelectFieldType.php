@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Class CheckboxesFieldType
+ * Class MultiSelectFieldType
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
@@ -11,7 +11,7 @@ namespace Craft;
  * @package   craft.app.fieldtypes
  * @since     1.0
  */
-class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
+class FormBuilder_MultiSelectFieldType extends BaseOptionsFieldType
 {
   // Properties
   // =========================================================================
@@ -31,7 +31,7 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
    */
   public function getName()
   {
-    return Craft::t('| FormBuilder | Checkboxes');
+    return Craft::t('| FormBuilder | Multi-select');
   }
 
   /**
@@ -49,7 +49,7 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
     $required     = $name->required;
     $options      = $this->getTranslatedOptions();
     $instructions = $name->instructions;
-    
+
     // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
@@ -59,13 +59,13 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
     }
 
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
-    $html = craft()->templates->render('_includes/forms/checkboxGroup', array(
-      'name'          => $name,
+    $html = craft()->templates->render('_includes/forms/multiselect', array(
+      'name'    => $name,
       'id'            => $id,
       'instructions'  => $instructions,
       'required'      => $required,
-      'options'       => $options,
-      'values'        => $values
+      'values'  => $values,
+      'options' => $options
     ));
     craft()->path->setTemplatesPath(craft()->path->getTemplatesPath());
 
@@ -82,6 +82,6 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
    */
   protected function getOptionsSettingsLabel()
   {
-    return Craft::t('Checkbox Options');
+    return Craft::t('Multi-select Options');
   }
 }

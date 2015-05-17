@@ -5,16 +5,30 @@
 
 {%- set options = (options is defined ? options : []) %}
 {%- set value = (value is defined ? value : null) %}
+{%- set label = (name is defined ? name: null) %}
 {%- set hasOptgroups = false -%}
+{%- set warning = (warning is defined ? warning : null) %}
+{%- set errors = (errors is defined ? errors : null) -%}
 
-<div class="{{ class }}">
+<div class="field select"{% if id %} id="{{ id }}"{% endif %}>
+	
+	<div class="heading">
+	{% if label %}
+		<label{% if required is defined and required %} class="required"{% endif %}{% if id %} for="{{ id }}"{% endif %}>
+			{{- label|raw -}}
+		</label>
+	{% endif %}
+	{% if instructions %}<div class="instructions">{{ instructions }}</div>{% endif %}
+	</div>
+
 	<select
 		{%- if id is defined %} id="{{ id }}"{% endif %}
 		{%- if toggle is defined and toggle %} class="fieldtoggle"{% endif %}
 		{%- if name is defined %} name="{{ name }}"{% endif %}
 		{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
 		{%- if disabled is defined and disabled %} disabled{% endif %}
-		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}>
+		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}
+		{%- if required is defined %} {%- if required == '1' %} required{% endif %}{% endif %}>
 		{% for key, option in options %}
 			{% if option.optgroup is defined %}
 				{% if hasOptgroups %}
@@ -34,4 +48,10 @@
 			</optgroup>
 		{% endif %}
 	</select>
+
+	{% if warning %}
+		<p class="warning">{{ warning }}</p>
+	{% endif %}
+	{% include "_includes/forms/errorList" with { errors: errors } %}
+
 </div>

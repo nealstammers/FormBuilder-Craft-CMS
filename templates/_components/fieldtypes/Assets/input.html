@@ -1,5 +1,13 @@
 {% if name is defined and name %}
-	<input type="hidden" name="{{ name }}" value="">
+	{# <input type="file" name="{{ name }}" value=""> #}
+
+	<input type="file"
+		{%- if id is defined %} id="{{ id }}"{% endif %}
+		{%- if class is defined %} class="{{ class }}"{% endif %}
+		{%- if name is defined %} name="{{ name }}"{% endif %}
+		{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
+		{%- if disabled is defined and disabled %} disabled{% endif %}>
+
 {% endif -%}
 
 {% set elements = (elements is defined ? elements : []) -%}
@@ -19,7 +27,7 @@
 </div>
 
 
-{% set js %}
+{# {% set js %}
 	new {{ jsClass }}(
 		"{{ id   | namespaceInputId   | e('js') }}",
 		"{{ name | namespaceInputName | e('js') }}",
@@ -33,4 +41,4 @@
 	);
 {% endset %}
 
-{% includeJs js %}
+{% includeJs js %} #}

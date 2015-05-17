@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Class CheckboxesFieldType
+ * Class DropdownFieldType
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
@@ -11,16 +11,8 @@ namespace Craft;
  * @package   craft.app.fieldtypes
  * @since     1.0
  */
-class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
+class FormBuilder_DropdownFieldType extends BaseOptionsFieldType
 {
-  // Properties
-  // =========================================================================
-
-  /**
-   * @var bool
-   */
-  protected $multi = true;
-
   // Public Methods
   // =========================================================================
 
@@ -31,41 +23,41 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
    */
   public function getName()
   {
-    return Craft::t('| FormBuilder | Checkboxes');
+    return Craft::t('| FormBuilder | Dropdown');
   }
 
   /**
    * @inheritDoc IFieldType::getInputHtml()
    *
    * @param string $name
-   * @param mixed  $values
+   * @param mixed  $value
    *
    * @return string
    */
-  public function getInputHtml($name, $values)
+  public function getInputHtml($name, $value)
   {
     // Variables
     $fieldId      = $name->id;
     $required     = $name->required;
     $options      = $this->getTranslatedOptions();
     $instructions = $name->instructions;
-    
+
     // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
-    // If this is a new entry, look for any default options
+    // If this is a new entry, look for a default option
     if ($this->isFresh()) {
-      $values = $this->getDefaultValue();
+      $value = $this->getDefaultValue();
     }
 
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
-    $html = craft()->templates->render('_includes/forms/checkboxGroup', array(
+    $html = craft()->templates->render('_includes/forms/select', array(
       'name'          => $name,
       'id'            => $id,
       'instructions'  => $instructions,
       'required'      => $required,
-      'options'       => $options,
-      'values'        => $values
+      'value'         => $value,
+      'options'       => $options
     ));
     craft()->path->setTemplatesPath(craft()->path->getTemplatesPath());
 
@@ -82,6 +74,6 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
    */
   protected function getOptionsSettingsLabel()
   {
-    return Craft::t('Checkbox Options');
+    return Craft::t('Dropdown Options');
   }
 }
