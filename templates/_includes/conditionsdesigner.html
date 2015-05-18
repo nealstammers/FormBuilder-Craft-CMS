@@ -1,0 +1,71 @@
+{% if customizableTabs is not defined %}{% set customizableTabs = true %}{% endif %}
+{% if not customizableTabs and pretendTabName is not defined %}
+	{% set pretendTabName = "Content"|t %}
+{% endif %}
+
+{% set groups = craft.fields.getAllGroups('id') %}
+{% set fields = fieldLayout.getFields() %}
+
+{% includeCssFile "//fonts.googleapis.com/css?family=Coming+Soon" %}
+
+
+<div id="conditionsdesigner" class="conditionsdesigner">
+
+	<h2>{{ "Rules & Conditions"|t }}</h2>
+
+
+
+	<div class="tableview">
+		<table class="data fullwidth">
+			<thead>
+				<th></th>
+				<th scope="col">Field</th>
+			</thead>
+			<tbody>
+				{% for field in fields %}
+					{% set item = field.getField(field) %}
+					{% set fieldType = field.getField().type %}
+
+					{{ fieldType | inspect }}
+
+					<tr>
+						<td class="thin" data-checkboxcell><div class="checkbox" title="{{ 'Select'|t }}"></div></td>
+						<td data-title="{{item.name}}">{{item.name}}</td>
+						
+						<td data-title="title">
+							<div class="field select">
+								<select id="" name="">
+
+									{% if fieldType == 'FormBuilder_RadioButtons' %}
+										<option value="{{ item.handle }}">{{ item.name }}</option>
+									{% endif %}
+
+								</select>
+							</div>
+						</td>
+
+						<td>
+							<div class="field select">
+								<select id="" name="">
+									<option value="equal-to">equal to</option>
+									<option value="not-equal-to">not equal to</option>
+								</select>
+							</div>
+						</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+
+
+
+</div>
+
+{% set customjs %}
+	
+{% endset %}
+
+{% includeJs customjs %}
