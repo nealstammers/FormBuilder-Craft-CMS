@@ -73,3 +73,76 @@
   .toolbar { display: none; }
 }
 
+// ------------------------------------------
+// Field Layout Designer
+// ------------------------------------------
+#fieldlayoutform {
+  background: none;
+  padding: 0;
+
+  h1 {
+    margin-bottom: 24px;
+    font-family: HelveticaNeue-Light, HelveticaNeue, sans-serif;
+    font-size: 30px;
+    line-height: 1;
+    color: #da5a47;
+    font-weight: normal !important;
+    font-style: normal;
+    text-transform: none;
+    float: left;
+    margin-right: 40px;
+  }
+
+  .newtabbtn-container {
+    .btn.icon {
+      text-transform: none;
+      font-style: normal;
+      &:before {
+        content: "+";
+      }
+    }
+  }
+
+  // Field Tabs
+  .fld-tab {
+    .tabs {
+      padding: 0 1px;
+      .tab {
+        border: 1px solid #b9b9b9;
+        border-bottom-color: white;
+        border-radius: 0;
+        span {
+          font-family: Roboto, HelveticaNeue, sans-serif;
+          font-style: normal;
+          font-weight: 500;
+          text-transform: none;
+          color: #2e2e2e;
+        }
+        a {
+          &:before {
+            color: #c9c9c9;
+          }
+        }
+      }
+    }
+
+    &.fld-insertion {
+      .tab {
+        border: 1px dotted #b9b9b9;
+        border-bottom-color: white !important;
+      }
+      .fld-tabcontent {
+        border: 1px dotted #b9b9b9;
+      }
+    }
+
+    .fld-tabcontent {
+      border: 1px solid #b9b9b9;
+    }
+
+  }
+
+}
+
+.fld-tab.fld-tab.draghelper .tabs { padding: 1px !important; .tab { border-radius: 0; } }
+.fld-tab.draghelper .tabs .tab, .fld-tab.draghelper .fld-tabcontent, .fld-field.draghelper { background: transparent; box-shadow: none; }

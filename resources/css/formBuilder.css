@@ -60,3 +60,55 @@
 
 #content .toolbar {
   display: none; }
+
+#fieldlayoutform {
+  background: none;
+  padding: 0; }
+  #fieldlayoutform h1 {
+    margin-bottom: 24px;
+    font-family: HelveticaNeue-Light, HelveticaNeue, sans-serif;
+    font-size: 30px;
+    line-height: 1;
+    color: #da5a47;
+    font-weight: normal !important;
+    font-style: normal;
+    text-transform: none;
+    float: left;
+    margin-right: 40px; }
+  #fieldlayoutform .newtabbtn-container .btn.icon {
+    text-transform: none;
+    font-style: normal; }
+    #fieldlayoutform .newtabbtn-container .btn.icon:before {
+      content: "+"; }
+  #fieldlayoutform .fld-tab .tabs {
+    padding: 0 1px; }
+    #fieldlayoutform .fld-tab .tabs .tab {
+      border: 1px solid #b9b9b9;
+      border-bottom-color: white;
+      border-radius: 0; }
+      #fieldlayoutform .fld-tab .tabs .tab span {
+        font-family: Roboto, HelveticaNeue, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        text-transform: none;
+        color: #2e2e2e; }
+      #fieldlayoutform .fld-tab .tabs .tab a:before {
+        color: #c9c9c9; }
+  #fieldlayoutform .fld-tab.fld-insertion .tab {
+    border: 1px dotted #b9b9b9;
+    border-bottom-color: white !important; }
+  #fieldlayoutform .fld-tab.fld-insertion .fld-tabcontent {
+    border: 1px dotted #b9b9b9; }
+  #fieldlayoutform .fld-tab .fld-tabcontent {
+    border: 1px solid #b9b9b9; }
+
+.fld-tab.fld-tab.draghelper .tabs {
+  padding: 1px !important; }
+  .fld-tab.fld-tab.draghelper .tabs .tab {
+    border-radius: 0; }
+
+.fld-tab.draghelper .tabs .tab, .fld-tab.draghelper .fld-tabcontent, .fld-field.draghelper {
+  background: transparent;
+  box-shadow: none; }
+
+/*# sourceMappingURL=formBuilder.css.map */
