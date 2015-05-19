@@ -12,7 +12,7 @@
 	(size is defined and size ? null : 'fullwidth')
 ]|filter|join(' ') %}
 
-<div class="field text">
+<div class="field text{% if id %} {{ id }}{% endif %}">
 	{%- if type == 'password' %}<div class="passwordwrapper">{% endif -%}
 
 	<div class="heading">

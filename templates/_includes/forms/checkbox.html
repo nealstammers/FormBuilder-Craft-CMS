@@ -1,4 +1,5 @@
 {%- spaceless %}
+
 {% set class = [
 	(class is defined ? class : null),
 	((toggle is defined and toggle is not empty) or (reverseToggle is defined and reverseToggle is not empty) ? 'fieldtoggle' : null),
@@ -6,6 +7,8 @@
 ]|filter|join(' ') %}
 
 {% set value = (value is defined ? value : 1) %}
+{% set id = (id is defined and id ? id : 'checkbox'~random()) %}
+{% set label = (label is defined ? label) %}
 
 {% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
 	<input type="hidden" name="{{ name }}" value="">
@@ -23,4 +26,5 @@
 		{%- if reverseToggle is defined %} data-reverse-target="{{ reverseToggle }}"{% endif %}>
 	{%- if label is defined %}&nbsp;{{ label|raw }}{% endif %}
 </label>
+
 {% endspaceless -%}

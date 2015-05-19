@@ -1,6 +1,12 @@
 @import "mixins";
 
 // ------------------------------------------
+// Variables
+// ------------------------------------------
+$color-red: #f07575;
+$color-teal: #58d9b9;
+
+// ------------------------------------------
 // Plugin Header
 // ------------------------------------------
 #page-header {
@@ -93,6 +99,18 @@
     margin-right: 40px;
   }
 
+  h2 {
+    margin-bottom: 24px;
+    font-family: "Roboto", HelveticaNeue-Light, HelveticaNeue, sans-serif;
+    font-size: 16px;
+    line-height: 1;
+    color: black;
+    font-weight: 500 !important;
+    font-style: normal;
+    text-transform: none;
+    text-decoration: none;
+  }
+
   .newtabbtn-container {
     .btn.icon {
       text-transform: none;
@@ -138,6 +156,29 @@
 
     .fld-tabcontent {
       border: 1px solid #b9b9b9;
+      .fld-field {
+        padding: 8px;
+        border: none;
+        border-bottom: 1px solid rgba(black, .1);
+        &:last-child { border-bottom: none; }
+        &.fld-required {
+          span:after {
+            color: $color-red;
+          }
+        }
+        a {
+          &:before {
+            color: #c9c9c9;
+          }
+        }
+      }
+      span {
+        font-family: Roboto, HelveticaNeue, sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        text-transform: none;
+        color: #2e2e2e;
+      }
     }
 
   }
@@ -145,4 +186,59 @@
 }
 
 .fld-tab.fld-tab.draghelper .tabs { padding: 1px !important; .tab { border-radius: 0; } }
-.fld-tab.draghelper .tabs .tab, .fld-tab.draghelper .fld-tabcontent, .fld-field.draghelper { background: transparent; box-shadow: none; }
+.fld-tab.draghelper .tabs .tab {
+  border-bottom-color: white !important;
+}
+.fld-tab.draghelper .tabs .tab, .fld-tab.draghelper .fld-tabcontent, .fld-field.draghelper { 
+  background: transparent; 
+  box-shadow: none; 
+  border: 1px solid $color-teal;
+  span {
+    font-family: Roboto, HelveticaNeue, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    text-transform: none;
+    color: #2e2e2e;
+  }
+  a {
+    &:before {
+      color: #c9c9c9;
+    }
+  }
+  .fld-field {
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid rgba(black, .1);
+    &:last-child { border-bottom: none; }
+    &.fld-required {
+      span:after {
+        color: $color-red;
+      }
+    }
+    a {
+      &:before {
+        color: #c9c9c9;
+      }
+    }
+  }
+  span {
+    font-family: Roboto, HelveticaNeue, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: none;
+    color: #2e2e2e;
+  }
+}
+
+.fld-field.draghelper { 
+  background: transparent; 
+  box-shadow: none; border: 
+  none; 
+  span {
+    font-family: Roboto, HelveticaNeue, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: none;
+    color: #2e2e2e;
+  }
+}

@@ -75,6 +75,16 @@
     text-transform: none;
     float: left;
     margin-right: 40px; }
+  #fieldlayoutform h2 {
+    margin-bottom: 24px;
+    font-family: "Roboto", HelveticaNeue-Light, HelveticaNeue, sans-serif;
+    font-size: 16px;
+    line-height: 1;
+    color: black;
+    font-weight: 500 !important;
+    font-style: normal;
+    text-transform: none;
+    text-decoration: none; }
   #fieldlayoutform .newtabbtn-container .btn.icon {
     text-transform: none;
     font-style: normal; }
@@ -101,14 +111,69 @@
     border: 1px dotted #b9b9b9; }
   #fieldlayoutform .fld-tab .fld-tabcontent {
     border: 1px solid #b9b9b9; }
+    #fieldlayoutform .fld-tab .fld-tabcontent .fld-field {
+      padding: 8px;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+      #fieldlayoutform .fld-tab .fld-tabcontent .fld-field:last-child {
+        border-bottom: none; }
+      #fieldlayoutform .fld-tab .fld-tabcontent .fld-field.fld-required span:after {
+        color: #f07575; }
+      #fieldlayoutform .fld-tab .fld-tabcontent .fld-field a:before {
+        color: #c9c9c9; }
+    #fieldlayoutform .fld-tab .fld-tabcontent span {
+      font-family: Roboto, HelveticaNeue, sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      text-transform: none;
+      color: #2e2e2e; }
 
 .fld-tab.fld-tab.draghelper .tabs {
   padding: 1px !important; }
   .fld-tab.fld-tab.draghelper .tabs .tab {
     border-radius: 0; }
 
+.fld-tab.draghelper .tabs .tab {
+  border-bottom-color: white !important; }
+
 .fld-tab.draghelper .tabs .tab, .fld-tab.draghelper .fld-tabcontent, .fld-field.draghelper {
   background: transparent;
-  box-shadow: none; }
+  box-shadow: none;
+  border: 1px solid #58d9b9; }
+  .fld-tab.draghelper .tabs .tab span, .fld-tab.draghelper .fld-tabcontent span, .fld-field.draghelper span {
+    font-family: Roboto, HelveticaNeue, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    text-transform: none;
+    color: #2e2e2e; }
+  .fld-tab.draghelper .tabs .tab a:before, .fld-tab.draghelper .fld-tabcontent a:before, .fld-field.draghelper a:before {
+    color: #c9c9c9; }
+  .fld-tab.draghelper .tabs .tab .fld-field, .fld-tab.draghelper .fld-tabcontent .fld-field, .fld-field.draghelper .fld-field {
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+    .fld-tab.draghelper .tabs .tab .fld-field:last-child, .fld-tab.draghelper .fld-tabcontent .fld-field:last-child, .fld-field.draghelper .fld-field:last-child {
+      border-bottom: none; }
+    .fld-tab.draghelper .tabs .tab .fld-field.fld-required span:after, .fld-tab.draghelper .fld-tabcontent .fld-field.fld-required span:after, .fld-field.draghelper .fld-field.fld-required span:after {
+      color: #f07575; }
+    .fld-tab.draghelper .tabs .tab .fld-field a:before, .fld-tab.draghelper .fld-tabcontent .fld-field a:before, .fld-field.draghelper .fld-field a:before {
+      color: #c9c9c9; }
+  .fld-tab.draghelper .tabs .tab span, .fld-tab.draghelper .fld-tabcontent span, .fld-field.draghelper span {
+    font-family: Roboto, HelveticaNeue, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: none;
+    color: #2e2e2e; }
+
+.fld-field.draghelper {
+  background: transparent;
+  box-shadow: none;
+  border: none; }
+  .fld-field.draghelper span {
+    font-family: Roboto, HelveticaNeue, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: none;
+    color: #2e2e2e; }
 
 /*# sourceMappingURL=formBuilder.css.map */

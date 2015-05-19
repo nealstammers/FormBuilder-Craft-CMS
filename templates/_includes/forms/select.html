@@ -6,11 +6,13 @@
 {%- set options = (options is defined ? options : []) %}
 {%- set value = (value is defined ? value : null) %}
 {%- set label = (name is defined ? name: null) %}
+{%- set instructions = (instructions is defined ? instructions : null) %}
+{%- set id = (id is defined ? id : null) %}
 {%- set hasOptgroups = false -%}
 {%- set warning = (warning is defined ? warning : null) %}
 {%- set errors = (errors is defined ? errors : null) -%}
 
-<div class="field select"{% if id %} id="{{ id }}"{% endif %}>
+<div class="field select{% if id %} {{ id }}{% endif %}">
 	
 	<div class="heading">
 	{% if label %}
