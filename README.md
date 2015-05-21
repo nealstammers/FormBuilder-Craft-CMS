@@ -1,4 +1,6 @@
 [Documentation](http://roundhouse.github.io/FormBuilder-Craft-CMS/)
+### Craft 3
+So...winter is coming. Which means for Craft 3 I'll have to (also want to) rewire this plugin. Because of that I want to get this version of plugin to a good working spot. I'll continue fixing bugs and issues, but feature requests, etc will have to wait until after Craft 3 is released. 
 
 ### Form Fieldset/Groups
 Want to be able to group your fields into fieldsets? Easy, aslo checkout **sampleFormFieldsets.html**
