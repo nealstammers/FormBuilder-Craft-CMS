@@ -43,10 +43,7 @@ class FormBuilder_EntriesController extends BaseController
 	{
 		// Require a post request
 		$this->requirePostRequest();
-
-		// Honeypot validation
-		$honeypot = craft()->request->getPost('formHoneypot');
-		if ($honeypot) { throw new HttpException(404); }
+    // $this->requireAjaxRequest();
 
 		// Get form by handle name
 		$formBuilderHandle = craft()->request->getPost('formHandle');
@@ -59,19 +56,24 @@ class FormBuilder_EntriesController extends BaseController
     // Collect form submission data
     $data = craft()->request->getPost();
 
+    // Filter out unused fields (action, handle, etc)
+    $postData = $this->_filterPostKeys($data);
+
     // New form entry model
     $formBuilderEntry = new FormBuilder_EntryModel();
 
     // Set entry attributes
     $formBuilderEntry->formId     = $form->id;
     $formBuilderEntry->title      = $form->name;
-    $formBuilderEntry->data       = $data;
+    $formBuilderEntry->data       = $postData;
+
 
     // ###########################################################
     // Notifications
     // ###########################################################
     $sendNotification = false;
     $sendRegistrarNotification = false;
+    
     // Notify Registrar
     if ($form->notifyRegistrant and $form->notificationFieldHandleName != '') {
       $sendRegistrarNotification = true;
@@ -81,50 +83,48 @@ class FormBuilder_EntriesController extends BaseController
       $sendNotification = true;
     }
 
-    if (craft()->request->isAjaxRequest()) {
-      $this->returnJson(array('success' => false));
-    }
 
     // ###########################################################
     // Save Form Entry To Database
     // ###########################################################
-    // if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
+    if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
-    //   // Notify Registrar
-    //   if ($sendRegistrarNotification) {
-    //     $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
-    //   }
-    //   // Notify Form Owner
-    //   if ($sendNotification) {
-    //     $this->_sendEmailNotification($formBuilderEntry, $form);
-    //   }
+      // Notify Registrar if true
+      if ($sendRegistrarNotification) {
+        $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
+      }
 
+      // Notify Form Owner if true
+      if ($sendNotification) {
+        $this->_sendEmailNotification($formBuilderEntry, $form);
+      }
 
+      // Get success message from form settings 
+      if (!empty($form->successMessage)) {
+        $successMessage = $form->successMessage;
+      } else {
+        $successMessage =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
+      }
 
-  //     // Time to make the notifications
-  //     if ($this->_sendEmailNotification($formBuilderEntry, $form)) {
-		// 		// Set the message
-		// 		if (!empty($form->successMessage)) {
-		// 			$message = $form->successMessage;
-		// 		} else {
-		// 			$message =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
-		// 		}
-		// 		craft()->userSession->setFlash('success', $message);
-		// 		$this->redirectToPostedUrl();
-		// 	} else {
-		// 		craft()->userSession->setError(Craft::t('We\'re sorry, but something has gone wrong.'));
-		// 	}
-		// 	craft()->userSession->setNotice(Craft::t('Entry saved.'));
-		// 	$this->redirectToPostedUrl($formBuilderEntry);
-		// } else {
-		// 	craft()->userSession->setNotice(Craft::t("Couldn't save the form."));
-		// }
+      // Return success message
+      $this->returnJson(
+        ['success' => true, 'message' => $successMessage]
+      );
 
+    } else {
+      // Get error message from form settings 
+      if (!empty($form->errorMessage)) {
+        $errorMessage = $form->errorMessage;
+      } else {
+        $errorMessage =  Craft::t('We\'re sorry, but something has gone wrong.');
+      }
 
-		// Send the saved form back to the template
-		craft()->urlManager->setRouteVariables(array(
-			'entry' => $formBuilderEntry
-		));
+      // Return error message
+      $this->returnJson(
+        ['error' => true, 'message' => $errorMessage]
+      );
+    }
+
 	}
 
 	/**
@@ -317,8 +317,7 @@ class FormBuilder_EntriesController extends BaseController
 			'action',
 			'redirect',
 			'formhandle',
-			'honeypot',
-			'required',
+			'honeypot'
 		);
 		if (isset($post['honeypot'])) {
 			$honeypot = $post['honeypot'];

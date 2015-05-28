@@ -3,9 +3,9 @@
   $('#contactForm').submit(function(e) {
     e.preventDefault();
 
+
     var url = '/admin/actions/' + $(this).children("[name=action]").attr('value');
 
-    console.log(url);
     // Validate Parsley
     if ($(this).parsley().isValid()) {
 
@@ -17,12 +17,14 @@
       $.post(url, data, function(response) {
         if (response.success) {
           console.log(response);
-          // $('#contactForm-notification').html('Thanks, form submitted.');
+          $('#contactForm-notification').html('<p class="success-message">'+response.message+'</p>');
+          document.getElementById("contactForm").reset();
         } else {
           console.log(response);
-          // $('#contactForm-notification').html('An error occurred. Please try again.');
+          $('#contactForm-notification').html('<p class="error-message">'+response.message+'</p>');
         }
       });
+
     
     } // End parlsey
 
