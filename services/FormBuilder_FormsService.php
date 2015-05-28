@@ -127,12 +127,15 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 
 		$formRecord->name       													= $form->name;
 		$formRecord->handle     													= $form->handle;
-		$formRecord->toEmail    													= $form->toEmail;
 		$formRecord->subject    													= $form->subject;
+		$formRecord->successMessage    										= $form->successMessage;
+		$formRecord->errorMessage    											= $form->errorMessage;
+		$formRecord->notifyFormAdmin     									= $form->notifyFormAdmin;
+		$formRecord->toEmail    													= $form->toEmail;
+		$formRecord->notificationTemplatePath							= $form->notificationTemplatePath;
 		$formRecord->notifyRegistrant    									= $form->notifyRegistrant;
 		$formRecord->notificationTemplatePathRegistrant		= $form->notificationTemplatePathRegistrant;
 		$formRecord->notificationFieldHandleName					= $form->notificationFieldHandleName;
-		$formRecord->notificationTemplatePath							= $form->notificationTemplatePath;
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());

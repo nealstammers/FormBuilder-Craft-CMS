@@ -13,7 +13,7 @@ class FormBuilder_EntryRecord extends BaseRecord
     return array(
       'formId' => AttributeType::Number,
       'title'  => AttributeType::String,
-      'data'   => AttributeType::Mixed,
+      'data'   => AttributeType::String,
     );
   }
 

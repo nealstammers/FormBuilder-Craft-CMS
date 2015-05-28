@@ -22,6 +22,21 @@ class FormBuilderVariable
     return craft()->formBuilder_forms->getFormById($formId);
   }
 
+  function includeFormValidation()
+  {
+    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/js/parsley.min.js'));
+  }
+
+  function includeJs()
+  {
+    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/js/formbuilder-front.js'));
+  }
+
+  function includeCss()
+  {
+    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/css/formbuilder-front.css'));
+  }
+
 
   /**
    * Returns the field's input HTML.

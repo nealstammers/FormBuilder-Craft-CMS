@@ -56,6 +56,7 @@ class FormBuilder_RadioButtonsFieldType extends BaseOptionsFieldType
       'id'            => $id,
       'instructions'  => $instructions,
       'value'         => $value,
+      'required'      => $required,
       'options'       => $options
     ));
     craft()->path->setTemplatesPath(craft()->path->getTemplatesPath());

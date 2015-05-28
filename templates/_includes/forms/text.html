@@ -37,7 +37,8 @@
 			{%- if disabled is defined and disabled %} disabled {% endif %}
 			{%- if readonly is defined and readonly %} readonly {% endif %}
 			{%- if placeholder is defined %} placeholder="{{ placeholder }}"{% endif %}
-			{%- if required is defined %} {%- if required == '1' %} required{% endif %}{% endif %}>
+			{%- if required is defined %} {%- if required == '1' %} required{% endif %}{% endif %}
+			 data-parsley-required-message="{{label}} field is required">
 		{%- if type == 'password' %}</div>{% endif %}
 	</div>
 	

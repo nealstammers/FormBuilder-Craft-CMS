@@ -20,13 +20,16 @@ class FormBuilder_FormRecord extends BaseRecord
 		return array(
 			'name'          											=> array(AttributeType::Name, 'required' => true),
 			'handle'        											=> array(AttributeType::Handle, 'required' => true),
-			'toEmail'       											=> array(AttributeType::Name, 'required' => true),
-			'subject'       											=> array(AttributeType::Name),
-			'notifyRegistrant'       							=> array(AttributeType::Bool),
+			'subject'       											=> AttributeType::Name,
+			'successMessage'       								=> AttributeType::String,
+			'errorMessage'       									=> AttributeType::String,
+			'toEmail'       											=> AttributeType::Name,
+			'notifyFormAdmin'       							=> AttributeType::Bool,
+			'notificationTemplatePath'						=> AttributeType::String,
+			'notifyRegistrant'       							=> AttributeType::Bool,
 			'notificationFieldHandleName'					=> AttributeType::String,
 			'notificationTemplatePathRegistrant'	=> AttributeType::String,
-			'notificationTemplatePath'						=> array(AttributeType::String, 'required' => true),
-			'fieldLayoutId' 											=> AttributeType::Number,
+			'fieldLayoutId' 											=> AttributeType::Number
 		);
 	}
 

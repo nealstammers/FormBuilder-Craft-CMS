@@ -19,7 +19,7 @@
 {% endset %}
 
 {% block content %}
-	<h1>Form Settings</h1>
+<h1>{{ "Form Settings"|t }}</h1>
 	<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 		<input type="hidden" name="action" value="formBuilder/forms/saveForm">
 		<input type="hidden" name="redirect" value="formbuilder/forms">
@@ -28,8 +28,8 @@
 
 		{{ forms.textField({
 			first: true,
-			label: "Name"|t,
-			instructions: "What this form will be called in the CP."|t,
+			label: "Form Name"|t,
+			instructions: "Give this form a name."|t,
 			id: 'name',
 			name: 'name',
 			value: form.name,
@@ -49,18 +49,7 @@
 			errors: form.getErrors('handle'),
 			required: true
 		}) }}
-
-		{{ forms.textField({
-			label: "To Email"|t,
-			instructions: "Where should this form send to?"|t,
-			id: 'toEmail',
-			class: 'toEmail',
-			name: 'toEmail',
-			value: form.toEmail,
-			errors: form.getErrors('toEmail'),
-			required: true
-		}) }}
-
+		
 		{{ forms.textField({
 			label: "Email Subject"|t,
 			instructions: "Subject line for email notifications"|t,
@@ -71,7 +60,64 @@
 			errors: form.getErrors('subject'),
 			required: false
 		}) }}
+
+		<hr />
+
+		<h1>{{ "Messages"|t }}</h1>
+
+		{{ forms.textField({
+			label: "Success Message"|t,
+			instructions: "Please enter success message"|t,
+			id: 'successMessage',
+			class: 'successMessage',
+			name: 'successMessage',
+			value: form.successMessage,
+			errors: form.getErrors('successMessage'),
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Error Message"|t,
+			instructions: "Please enter error message."|t,
+			id: 'errorMessage',
+			class: 'errorMessage',
+			name: 'errorMessage',
+			value: form.errorMessage,
+			errors: form.getErrors('errorMessage'),
+			required: false
+		}) }}
+
+		<hr />
+
+		<h1>{{ "Notifications"|t }}</h1>
 		
+		{# ################################ #}
+		{# Notify Form Owner #}
+		{# ################################ #}
+		{{ forms.checkboxField({
+			label: "Send Notification?"|t,
+			instructions: "Should the form send notification to form owner?"|t,
+			id: 'notifyFormAdmin',
+			class: 'notifyFormAdmin',
+			name: 'notifyFormAdmin',
+			value: 1,
+			checked: form.notifyFormAdmin,
+			errors: form.getErrors('notifyFormAdmin'),
+			required: false
+		}) }}
+		
+		<div class="notifyEmailTemplate" style="width: 100%;">
+		{{ forms.textField({
+			label: "To Email"|t,
+			instructions: "Where should this form send to?"|t,
+			id: 'toEmail',
+			class: 'toEmail',
+			name: 'toEmail',
+			value: form.toEmail,
+			errors: form.getErrors('toEmail'),
+			required: false
+		}) }}
+
 		{{ forms.textField({
 			label: "Email Template Path"|t,
 			instructions: "Enter Email Template Path. default 'formbuilder/email/default'"|t,
@@ -82,9 +128,12 @@
 			errors: form.getErrors('notificationTemplatePath'),
 			required: true
 		}) }}
+		</div>
 		
+		{# ################################ #}
+		{# Notify Form Submitter #}
+		{# ################################ #}
 		{% if form.id %}
-
 			{% set formId = craft.formBuilder.getFormById(form.id) %}
 			{% set fields = formId.fieldLayout.getFieldLayout().getFields() %}
 			{% set groupOptions = [] %}
@@ -150,9 +199,10 @@
 {% endblock %}
 
 
-{% set js %}
+{% set notificationJs %}
 	{% if not form.handle %}new Craft.HandleGenerator('#name', '#handle');{% endif %}
 	
+	{# Notify Registrant Toggle #}
 	if($(".notifyRegistrant").is(':checked')) {
 		$('.registrantEmailTemplate').show()
 	} else {
@@ -167,5 +217,20 @@
     }
   });
 
+	{# Notify Admin Toggle #}
+	if($(".notifyFormAdmin").is(':checked')) {
+		$('.notifyEmailTemplate').show()
+	} else {
+		$('.notifyEmailTemplate').hide()
+	}
+
+  $(".notifyFormAdmin").change(function() {
+    if(this.checked) {
+    	$('.notifyEmailTemplate').slideDown()
+    } else {
+    	$('.notifyEmailTemplate').slideUp()
+    }
+  });
+
 {% endset %}
-{% includeJs js %}
+{% includeJs notificationJs %}

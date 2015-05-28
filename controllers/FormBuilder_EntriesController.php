@@ -48,100 +48,77 @@ class FormBuilder_EntriesController extends BaseController
 		$honeypot = craft()->request->getPost('formHoneypot');
 		if ($honeypot) { throw new HttpException(404); }
 
-		// Set the required errors array
-		$errors['required'] = array();
-
-		// Get the form
+		// Get form by handle name
 		$formBuilderHandle = craft()->request->getPost('formHandle');
 		if (!$formBuilderHandle) { throw new HttpException(404);}
-
-		// Required attributes
-		$required = craft()->request->getPost('required');
-		if ($required){
-			foreach ($required as $key => $message)	{
-				$value = craft()->request->getPost($key);
-				if (empty($value)) {
-					$errors['required'][$key] = $message;
-				}
-			}
-		}
-
-		if (!empty($errors['required'])) {
-			craft()->userSession->setError($errors);
-			craft()->userSession->setFlash('post', craft()->request->getPost());
-			$this->redirect(craft()->request->getUrl());
-		}
 
 		// Get the form model, need this to save the entry
 		$form = craft()->formBuilder_entries->getFormByHandle($formBuilderHandle);
 		if (!$form) { throw new HttpException(404); }
 
-		// @todo Need to exclude certain keys
-		$excludedPostKeys = array();
+    // Collect form submission data
+    $data = craft()->request->getPost();
 
-		// Form data
-		$data = serialize(craft()->request->getPost());
+    // New form entry model
+    $formBuilderEntry = new FormBuilder_EntryModel();
 
-		// New form entry model
-		$formBuilderEntry = new FormBuilder_EntryModel();
+    // Set entry attributes
+    $formBuilderEntry->formId     = $form->id;
+    $formBuilderEntry->title      = $form->name;
+    $formBuilderEntry->data       = $data;
 
-		// Set entry attributes
-		$formBuilderEntry->formId		= $form->id;
-		$formBuilderEntry->title   	= $form->name;
-		$formBuilderEntry->data   	= $data;
+    // ###########################################################
+    // Notifications
+    // ###########################################################
+    $sendNotification = false;
+    $sendRegistrarNotification = false;
+    // Notify Registrar
+    if ($form->notifyRegistrant and $form->notificationFieldHandleName != '') {
+      $sendRegistrarNotification = true;
+    }
+    // Notify Form Admin
+    if ($form->notifyFormAdmin and $form->toEmail != '') {
+      $sendNotification = true;
+    }
 
-		$sendNotification = true;
-		$sendRegNotification = false;
+    if (craft()->request->isAjaxRequest()) {
+      $this->returnJson(array('success' => false));
+    }
 
+    // ###########################################################
+    // Save Form Entry To Database
+    // ###########################################################
+    // if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
-		// Notify Registrar Logic
-		if ($form->notifyRegistrant) {
-			$form->yourEmail	= craft()->request->getPost('yourEmail');
-
-			// Notify user of invalid email
-			if (!$this->validateAddress($form->yourEmail)) {
-				craft()->userSession->setNotice(Craft::t('Email Address Invalid.'));
-				$this->redirectToPostedUrl();
-			} else {
-				$sendRegNotification = true;
-			}
-		}
-
-		// Validate email handle yourEmail if excist
-		$form->yourEmail	= craft()->request->getPost('yourEmail');
-		if ($form->yourEmail) {
-			if (!$this->validateAddress($form->yourEmail)) {
-				craft()->userSession->setNotice(Craft::t('Email Address Invalid.'));
-				$this->redirectToPostedUrl();
-			}
-		}
-
-    // Save entry to database
-    if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
+    //   // Notify Registrar
+    //   if ($sendRegistrarNotification) {
+    //     $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
+    //   }
+    //   // Notify Form Owner
+    //   if ($sendNotification) {
+    //     $this->_sendEmailNotification($formBuilderEntry, $form);
+    //   }
 
 
-      if ($sendRegNotification) {
-        $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
-      }
 
-      // Time to make the notifications
-      if ($this->_sendEmailNotification($formBuilderEntry, $form)) {
-				// Set the message
-				if (!empty($form->successMessage)) {
-					$message = $form->successMessage;
-				} else {
-					$message =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
-				}
-				craft()->userSession->setFlash('success', $message);
-				$this->redirectToPostedUrl();
-			} else {
-				craft()->userSession->setError(Craft::t('We\'re sorry, but something has gone wrong.'));
-			}
-			craft()->userSession->setNotice(Craft::t('Entry saved.'));
-			$this->redirectToPostedUrl($formBuilderEntry);
-		} else {
-			craft()->userSession->setNotice(Craft::t("Couldn't save the form."));
-		}
+  //     // Time to make the notifications
+  //     if ($this->_sendEmailNotification($formBuilderEntry, $form)) {
+		// 		// Set the message
+		// 		if (!empty($form->successMessage)) {
+		// 			$message = $form->successMessage;
+		// 		} else {
+		// 			$message =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
+		// 		}
+		// 		craft()->userSession->setFlash('success', $message);
+		// 		$this->redirectToPostedUrl();
+		// 	} else {
+		// 		craft()->userSession->setError(Craft::t('We\'re sorry, but something has gone wrong.'));
+		// 	}
+		// 	craft()->userSession->setNotice(Craft::t('Entry saved.'));
+		// 	$this->redirectToPostedUrl($formBuilderEntry);
+		// } else {
+		// 	craft()->userSession->setNotice(Craft::t("Couldn't save the form."));
+		// }
 
 
 		// Send the saved form back to the template

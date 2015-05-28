@@ -3,9 +3,6 @@
 {%- set label = (name is defined ? name: null) %}
 {%- set instructions = (instructions is defined ? instructions : null) %}
 {%- set name = (name is defined and name ? name~'[]' : null) %}
-{%- set warning = (warning is defined ? warning : null) %}
-{%- set errors = (errors is defined ? errors : null) -%}
-
 
 <div class="field checkboxes"{% if id %} id="{{ id }}"{% endif %}>
 
@@ -25,21 +22,16 @@
 	{%- for key, option in options %}
 		{%- set optionLabel = (option.label is defined ? option.label : option) %}
 		{%- set optionValue = (option.value is defined ? option.value : key) -%}
-		<div>
 			{% include "_includes/forms/checkbox" with {
-				label:     optionLabel,
-				id:        (loop.first and id is defined ? id : null),
-				name:      name,
-				value:     optionValue,
-				checked:   (optionValue in values),
-				autofocus: (autofocus is defined and autofocus and loop.first and not craft.request.isMobileBrowser(true))
+				parentLabel:	(loop.first and label is defined ? label : null),
+				label:     		optionLabel,
+				id:        		(loop.first and id is defined ? id : null),
+				name:      		name,
+				value:     		optionValue,
+				checked:   		(optionValue in values),
+				required:  		(required is defined and required ? required : null),
+				autofocus: 		(autofocus is defined and autofocus and loop.first and not craft.request.isMobileBrowser(true))
 			} only %}
-		</div>
 	{%- endfor %}
-
-	{% if warning %}
-		<p class="warning">{{ warning }}</p>
-	{% endif %}
-	{% include "_includes/forms/errorList" with { errors: errors } %}
 
 </div>
