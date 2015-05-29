@@ -51,51 +51,36 @@ class FormBuilder_EntryModel extends BaseElementModel
 	 */
 	public function _normalizeDataForElementsTable()
 	{
-		$data = unserialize($this->data);
-		$data = $this->_filterPostKeys($data);
+		$data = json_decode($this->data, true);
 
-		// Pop off the first (4) items from the data array
-		$data = array_slice($data, 0, 5);
+		// Pop off the first (2) items from the data array
+		$data = array_slice($data, 0, 4);
 
 		$newData = '<ul>';
+
 		foreach ($data as $key => $value) {	
 			$capitalize = ucfirst($key);
-			$addSpace = preg_replace('/(?<!\ )[A-Z]/', ' $0', $capitalize);
+			$removeUnderscore = str_replace('_', ' ', $key);
 			$valueArray = is_array($value);
+
 			if ($valueArray == '1') {
-				$newData .= '<li class="left icon text" style="margin-right:10px;"><strong>' . $addSpace . '</strong>: ';
+				$newData .= '<li class="left icon" style="margin-right:10px;"><strong>' . $removeUnderscore . '</strong>: ';
 				foreach ($value as $item) {
-					$newData .= ' ' . $item;
+					if ($item != '') {
+						$newData .= $item;
+						if (next($value)==true) $newData .= ', ';
+					}
 				}
-				$newData .= '</li>';
 			} else {
-				$newData .= '<li class="left icon text" style="margin-right:10px;"><strong>' . $addSpace . '</strong>: ' . $value . '</li>';
+				if ($value != ''){
+					$newData .= '<li class="left icon" style="margin-right:10px;"><strong>' . $removeUnderscore . '</strong>: ' . $value . '</li>';
+				}
 			}
 		}
 
-		$newData .= "</ul>";
-
+		$newData .= '</ul>';
 		$this->__set('data', $newData);
 		return $this;
 	}
 
-
-	private function _filterPostKeys($post)
-	{
-		$filterKeys = array(
-			'required',
-			'action',
-			'formhandle',
-			'redirect'
-		);
-
-		if (is_array($post)) {
-			foreach ($post as $k => $v) {
-				if (in_array(strtolower($k), $filterKeys) || empty($v)) {
-					unset($post[$k]);
-				}
-			}
-		}
-		return $post;
-	}
 }

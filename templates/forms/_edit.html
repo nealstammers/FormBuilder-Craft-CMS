@@ -1,6 +1,8 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
-{% includeCssResource "formbuilder/css/formBuilder.css" %}
+{% includeCssResource "formbuilder/css/formbuilder.css" %}
+
+{% set selectedTab = '' %}
 {% set docsUrl = 'http://roundhouse.github.io/FormBuilder-Craft-CMS/#addform' %}
 
 {% set extraPageHeaderHtml %}
@@ -19,13 +21,16 @@
 {% endset %}
 
 {% block content %}
-<h1>{{ "Form Settings"|t }}</h1>
+<section id="create-form">
+	<h1 class="settings-toggle">{{ "Form Settings"|t }}</h1>
 	<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 		<input type="hidden" name="action" value="formBuilder/forms/saveForm">
 		<input type="hidden" name="redirect" value="formbuilder/forms">
 		{{ getCsrfInput() }}
 		{% if form.id %}<input type="hidden" name="formId" value="{{ form.id }}">{% endif %}
 
+		<div id="settings-container">
+		<div class="fieldset">
 		{{ forms.textField({
 			first: true,
 			label: "Form Name"|t,
@@ -60,134 +65,150 @@
 			errors: form.getErrors('subject'),
 			required: false
 		}) }}
-
-		<hr />
-
-		<h1>{{ "Messages"|t }}</h1>
-
-		{{ forms.textField({
-			label: "Success Message"|t,
-			instructions: "Please enter success message"|t,
-			id: 'successMessage',
-			class: 'successMessage',
-			name: 'successMessage',
-			value: form.successMessage,
-			errors: form.getErrors('successMessage'),
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Error Message"|t,
-			instructions: "Please enter error message."|t,
-			id: 'errorMessage',
-			class: 'errorMessage',
-			name: 'errorMessage',
-			value: form.errorMessage,
-			errors: form.getErrors('errorMessage'),
-			required: false
-		}) }}
-
-		<hr />
-
-		<h1>{{ "Notifications"|t }}</h1>
-		
-		{# ################################ #}
-		{# Notify Form Owner #}
-		{# ################################ #}
-		{{ forms.checkboxField({
-			label: "Send Notification?"|t,
-			instructions: "Should the form send notification to form owner?"|t,
-			id: 'notifyFormAdmin',
-			class: 'notifyFormAdmin',
-			name: 'notifyFormAdmin',
-			value: 1,
-			checked: form.notifyFormAdmin,
-			errors: form.getErrors('notifyFormAdmin'),
-			required: false
-		}) }}
-		
-		<div class="notifyEmailTemplate" style="width: 100%;">
-		{{ forms.textField({
-			label: "To Email"|t,
-			instructions: "Where should this form send to?"|t,
-			id: 'toEmail',
-			class: 'toEmail',
-			name: 'toEmail',
-			value: form.toEmail,
-			errors: form.getErrors('toEmail'),
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Email Template Path"|t,
-			instructions: "Enter Email Template Path. default 'formbuilder/email/default'"|t,
-			id: 'notificationTemplatePath',
-			class: 'notificationTemplatePath',
-			name: 'notificationTemplatePath',
-			value: form.notificationTemplatePath ? form.notificationTemplatePath : "formbuilder/email/default"|t,
-			errors: form.getErrors('notificationTemplatePath'),
-			required: true
-		}) }}
 		</div>
-		
-		{# ################################ #}
-		{# Notify Form Submitter #}
-		{# ################################ #}
-		{% if form.id %}
-			{% set formId = craft.formBuilder.getFormById(form.id) %}
-			{% set fields = formId.fieldLayout.getFieldLayout().getFields() %}
-			{% set groupOptions = [] %}
-			{% for field in fields %}
-				{% set item = field.getField(field) %}
-				{% set groupOptions = groupOptions|merge([{ label: item.name, value: item.handle }]) %}
-			{% endfor %}
+		</div>
 
-			<hr>
-			{{ forms.checkboxField({
-				label: "Notify Registrant?"|t,
-				instructions: "Should the form send notification to registrant?"|t,
-				id: 'notifyRegistrant',
-				class: 'notifyRegistrant',
-				name: 'notifyRegistrant',
-				value: 1,
-				checked: form.notifyRegistrant,
-				errors: form.getErrors('notifyRegistrant'),
+		<hr />
+
+		<h1 class="messages-toggle">{{ "Messages"|t }}</h1>
+		<div id="messages-container">
+			<div class="fieldset">
+			{{ forms.textField({
+				label: "Success Message"|t,
+				instructions: "Please enter success message"|t,
+				id: 'successMessage',
+				class: 'successMessage',
+				name: 'successMessage',
+				value: form.successMessage,
+				errors: form.getErrors('successMessage'),
 				required: false
 			}) }}
-			
-			<div class="registrantEmailTemplate" style="width: 100%;">
+
 			{{ forms.textField({
-				label: "Registrant Email Template Path"|t,
-				instructions: "Enter Email Template Path for Registrant. default 'formbuilder/email/registrant'"|t,
-				id: 'notificationTemplatePathRegistrant',
-				class: 'notificationTemplatePathRegistrant',
-				name: 'notificationTemplatePathRegistrant',
-				value: form.notificationTemplatePathRegistrant ? form.notificationTemplatePathRegistrant : "formbuilder/email/registrant"|t,
-				errors: form.getErrors('notificationTemplatePathRegistrant'),
-				required: true
+				label: "Error Message"|t,
+				instructions: "Please enter error message."|t,
+				id: 'errorMessage',
+				class: 'errorMessage',
+				name: 'errorMessage',
+				value: form.errorMessage,
+				errors: form.getErrors('errorMessage'),
+				required: false
 			}) }}
-			
-			{% if fields %}
-			{{ forms.selectField ({
-				label: "Notification Field"|t,
-				instructions: "Which field should we use to send out notification email? Note: field must first be added to the field layout below and saved."|t,
-				id: 'notificationFieldHandleName',
-				class: 'notificationFieldHandleName',
-				name: 'notificationFieldHandleName',
-				options: groupOptions ? groupOptions : '',
-				value: form.notificationFieldHandleName ? form.notificationFieldHandleName : groupOptions,
-				required: true
-			}) }}
-			{% endif %}
-		{% endif %}
+
+			</div>
 		</div>
 
-		<hr>
+		<hr />
 
+		{# NOTIFICATIONS TOGGLE #}
+		<h1 class="notifications-toggle">{{ "Notifications"|t }}</h1>
+		<div id="notifications-container">
+			{# ################################ #}
+			{# Notify Form Owner #}
+			{# ################################ #}
+			<div class="fieldset notifications">
+				{{ forms.checkboxField({
+					label: "Send Notification?"|t,
+					instructions: "Should the form send notification to form owner?"|t,
+					id: 'notifyFormAdmin',
+					class: 'notifyFormAdmin',
+					name: 'notifyFormAdmin',
+					value: 1,
+					checked: form.notifyFormAdmin,
+					errors: form.getErrors('notifyFormAdmin'),
+					required: false
+				}) }}
+			
+				<div class="notifyEmailTemplate" style="width: 100%;">
+					<div class="fieldset child">
+					{{ forms.textField({
+						label: "To Email"|t,
+						instructions: "Where should this form send to?"|t,
+						id: 'toEmail',
+						class: 'toEmail',
+						name: 'toEmail',
+						value: form.toEmail,
+						errors: form.getErrors('toEmail'),
+						required: false
+					}) }}
+
+					{{ forms.textField({
+						label: "Email Template Path"|t,
+						instructions: "Enter Email Template Path. default 'formbuilder/email/default'"|t,
+						id: 'notificationTemplatePath',
+						class: 'notificationTemplatePath',
+						name: 'notificationTemplatePath',
+						value: form.notificationTemplatePath ? form.notificationTemplatePath : "formbuilder/email/default"|t,
+						errors: form.getErrors('notificationTemplatePath'),
+						required: true
+					}) }}
+					</div>
+				</div>
+			
+			{# ################################ #}
+			{# Notify Form Submitter #}
+			{# ################################ #}
+			{% if form.id %}
+				{% set formId = craft.formBuilder.getFormById(form.id) %}
+				{% set fields = formId.fieldLayout.getFieldLayout().getFields() %}
+				{% set groupOptions = [{label: 'Select Email Field', value: '0'}] %}
+				{% for field in fields %}
+					{% set item = field.getField(field) %}
+					{% set groupOptions = groupOptions|merge([{ label: item.name, value: item.handle }]) %}
+				{% endfor %}
+
+				{{ forms.checkboxField({
+					label: "Notify Registrant?"|t,
+					instructions: "Should the form send notification to registrant?"|t,
+					id: 'notifyRegistrant',
+					class: 'notifyRegistrant',
+					name: 'notifyRegistrant',
+					value: 1,
+					checked: form.notifyRegistrant,
+					errors: form.getErrors('notifyRegistrant'),
+					required: false
+				}) }}
+				
+				<div class="registrantEmailTemplate" style="width: 100%;">
+				<div class="fieldset child">
+				{{ forms.textField({
+					label: "Registrant Email Template Path"|t,
+					instructions: "Enter Email Template Path for Registrant. default 'formbuilder/email/registrant'"|t,
+					id: 'notificationTemplatePathRegistrant',
+					class: 'notificationTemplatePathRegistrant',
+					name: 'notificationTemplatePathRegistrant',
+					value: form.notificationTemplatePathRegistrant ? form.notificationTemplatePathRegistrant : "formbuilder/email/registrant"|t,
+					errors: form.getErrors('notificationTemplatePathRegistrant'),
+					required: true
+				}) }}
+				
+				{% if fields %}
+				{{ forms.selectField ({
+					label: "Notification Field"|t,
+					instructions: "Which field should we use to send out notification email? Note: field must be first added to the Fields below and saved."|t,
+					id: 'notificationFieldHandleName',
+					class: 'notificationFieldHandleName',
+					name: 'notificationFieldHandleName',
+					options: groupOptions ? groupOptions : '',
+					value: form.notificationFieldHandleName ? form.notificationFieldHandleName : '',
+					required: true
+				}) }}
+				{% endif %}
+				</div>
+				</div>
+			{% endif %}
+			</div>
+		</div> {# END NOTIFICATIONS TOGGLE #}
+		
+		<hr>
+		
+		<h1 class="fields-toggle">{{ "Fields"|t }}</h1>
+		<div id="fields-container">
 		{% include "formbuilder/_includes/fieldlayoutdesigner" with {
 			fieldLayout: form.getFieldLayout(),
 			customizableTabs: true
 		} only %}
+		</div>
 
 		<hr>
 
@@ -196,12 +217,38 @@
 		</div>
 
 	</form>
+</section>
+
 {% endblock %}
 
 
 {% set notificationJs %}
 	{% if not form.handle %}new Craft.HandleGenerator('#name', '#handle');{% endif %}
 	
+	{# Toggle Fields Container #}
+	$('#fields-container').slideUp()
+	$('.fields-toggle').on('click', function(e){
+		$('#fields-container').slideToggle()
+	});
+
+	{# Toggle Settings Container #}
+	$('.settings-toggle').on('click', function(e){
+		$('#settings-container').slideToggle()
+	});
+
+	{# Toggle Messages Container #}
+	$('#messages-container').slideUp()
+	$('.messages-toggle').on('click', function(e){
+		$('#messages-container').slideToggle()
+	});
+
+	{# Toggle Notifications Container #}
+	$('#notifications-container').slideUp()
+	$('.notifications-toggle').on('click', function(e){
+		$('#notifications-container').slideToggle()
+	});
+
+
 	{# Notify Registrant Toggle #}
 	if($(".notifyRegistrant").is(':checked')) {
 		$('.registrantEmailTemplate').show()

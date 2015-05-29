@@ -1,7 +1,8 @@
 {% extends "_layouts/cp" %}
-{% includeCssResource "formbuilder/css/formBuilder.css" %}
+{% includeCssResource "formbuilder/css/formbuilder.css" %}
 
 {% set title = "Form Submission Details" %}
+{% set selectedTab = '' %}
 
 {% set extraPageHeaderHtml %}
   <a href="{{ url('formbuilder') }}">
@@ -19,7 +20,7 @@
 {% endset %}
 
 {% set content %}
-  
+
   <div id="entryDetails">
   <header>
     <h1>{{ form.name }}</h1>
@@ -30,20 +31,31 @@
   <hr>
 
   <table class="data fullwidth collapsible">
+
     {% for name, value in data %}
+
       {% if value %}
+
       <tr>
-        <td><strong>{{ name | addSpace }}</strong></td>
+        
+        <td><strong>{{ name | replaceUnderscoreWithSpace }}</strong></td>
+
         {% if value | checkArray == '1' %}
-        {% for key, item in value %}
-          <td>{{ item | markdown }}</td>
-        {% endfor %}
+          <td>
+          {% for key, item in value %}
+            <span class="item">{{ item }}</span>
+          {% endfor %}
+          </td>
         {% else %}
-        <td>{{ value | markdown }}</td>
+          <td>{{ value }}</td>
         {% endif %}
+
       </tr>
+
       {% endif %}
+
     {% endfor %}
+
   </table>
   
   </div>

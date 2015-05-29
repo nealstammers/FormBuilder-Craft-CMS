@@ -41,11 +41,6 @@ class FormBuilder_FormsController extends BaseController
 
 		$variables['tabs'] = $this->_getTabs();
 
-		// $variables['crumbs'] = array(
-		// 	array('label' => Craft::t('Entries'), 'url' => UrlHelper::getUrl('entries')),
-		// 	array('label' => Craft::t('Forms'), 'url' => UrlHelper::getUrl('formbuilder/forms')),
-		// );
-
 		$this->renderTemplate('formbuilder/forms/_edit', $variables);
 	}
 

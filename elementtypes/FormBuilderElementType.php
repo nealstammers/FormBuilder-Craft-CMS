@@ -26,16 +26,15 @@ class FormBuilderElementType extends BaseElementType
     return $sources;
   }
 
-  public function defineSearchableAttributes()
-  {
-    return array('id', 'data');
-  }
+  // public function defineSearchableAttributes()
+  // {
+  //   return array('title', 'id', 'data');
+  // }
 
   public function defineTableAttributes($source = null)
   {
     return array(
       'id'          => Craft::t('ID'),
-      // 'formId'      => Craft::t('Form ID'),
       'title'       => Craft::t('Title'),
       'dateCreated' => Craft::t('Date'),
       'data'        => Craft::t('Submission Data'),
