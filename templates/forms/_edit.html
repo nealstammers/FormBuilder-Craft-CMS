@@ -228,23 +228,28 @@
 	{# Toggle Fields Container #}
 	$('#fields-container').slideUp()
 	$('.fields-toggle').on('click', function(e){
+		$(this).toggleClass('active');
 		$('#fields-container').slideToggle()
 	});
 
 	{# Toggle Settings Container #}
+	$('.settings-toggle').addClass('active');
 	$('.settings-toggle').on('click', function(e){
+		$(this).toggleClass('active');
 		$('#settings-container').slideToggle()
 	});
 
 	{# Toggle Messages Container #}
 	$('#messages-container').slideUp()
 	$('.messages-toggle').on('click', function(e){
+		$(this).toggleClass('active');
 		$('#messages-container').slideToggle()
 	});
 
 	{# Toggle Notifications Container #}
 	$('#notifications-container').slideUp()
 	$('.notifications-toggle').on('click', function(e){
+		$(this).toggleClass('active');
 		$('#notifications-container').slideToggle()
 	});
 

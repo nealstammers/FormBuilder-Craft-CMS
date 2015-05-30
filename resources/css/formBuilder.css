@@ -14,11 +14,18 @@
 #entryDetails header h2 { margin: 0; font-size: 12px; }
 #entryDetails header h2 span { color: #da5a47; }
 
-#create-form h1 { margin-bottom: 0; }
+#create-form h1 { position: relative; margin-bottom: 0; cursor: pointer; }
+#create-form h1:before, #create-form h1:after { content: ""; display: block; height: 2px; width: 10px; background: #f07575; position: absolute; top: 17px; right: 20px; -webkit-transition: all 0.4s cubic-bezier(0.82, 0.17, 0.04, 0.85); -moz-transition: all 0.4s cubic-bezier(0.82, 0.17, 0.04, 0.85); transition: all 0.4s cubic-bezier(0.82, 0.17, 0.04, 0.85); }
+#create-form h1:before { -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
+#create-form h1.active:before { -webkit-transform: rotate(0); -moz-transform: rotate(0); -ms-transform: rotate(0); -o-transform: rotate(0); transform: rotate(0); }
 #create-form .fieldset { margin-top: 24px; }
 #create-form .fieldset.child { margin-top: 10px; }
 #create-form .fieldset.notifications div:nth-child(1) { margin-bottom: 0; }
 #create-form .fieldset.notifications div:nth-child(3) { margin-bottom: 0; }
+#create-form input[type=text] { box-shadow: none; border: 1px solid rgba(0, 0, 0, 0.2); padding: 12px; -webkit-transition: border 0.5s ease; -moz-transition: border 0.5s ease; transition: border 0.5s ease; }
+#create-form input[type=text]:focus { border: 1px solid rgba(0, 0, 0, 0.5); }
+
+#notifications .notification.notice { box-shadow: none; border-radius: 0; padding: 10px 40px; }
 
 #notifications-container { width: 100%; height: 100%; }
 #notifications-container hr { margin: 14px 0 !important; }

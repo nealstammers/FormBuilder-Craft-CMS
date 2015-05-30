@@ -84,7 +84,25 @@ $color-teal: #58d9b9;
 // ------------------------------------------
 #create-form {
   h1 {
+    position: relative;
     margin-bottom: 0;
+    cursor: pointer;
+    &:before, &:after {
+      content: "";
+      display: block;
+      @include size(10px 2px);
+      background: $color-red;
+      @include position(absolute, 17px 20px null null);
+      @include transition(all .4s cubic-bezier(0.82, 0.17, 0.04, 0.85));
+    }
+    &:before { @include transform(rotate(90deg)); }
+    // Active
+    &.active {
+      &:before { @include transform(rotate(0)); }
+    }
+    // Hover
+    &:hover {
+    }
   }
   .fieldset { 
     margin-top: 24px;
@@ -95,7 +113,28 @@ $color-teal: #58d9b9;
       div:nth-child(1) { margin-bottom: 0; }
       div:nth-child(3) { margin-bottom: 0; }
     }
+  }
 
+  input[type=text] {
+    box-shadow: none;
+    border: 1px solid rgba(black, .2);
+    padding: 12px;
+    @include transition(border .5s ease);
+    &:focus {
+      border: 1px solid rgba(black, .5);
+    }
+  }
+}
+
+// Notifications
+#notifications {
+  .notification {
+
+    &.notice {
+      box-shadow: none;
+      border-radius: 0;
+      padding: 10px 40px;
+    }
   }
 }
 
