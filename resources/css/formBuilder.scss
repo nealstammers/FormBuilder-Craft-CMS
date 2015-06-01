@@ -12,6 +12,14 @@ $color-teal: #58d9b9;
 #page-header {
   padding: 5px 0;
   & > h1 { display: none;}
+
+  .github-badges {
+    @include clearfix;
+    a {
+      float: left;
+      margin-right: 4px;
+    }
+  }
 }
 
 #extra-headers {
