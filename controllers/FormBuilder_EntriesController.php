@@ -43,7 +43,7 @@ class FormBuilder_EntriesController extends BaseController
 	{
 		// Require a post request
 		$this->requirePostRequest();
-    // $this->requireAjaxRequest();
+    $this->requireAjaxRequest();
 
 		// Get form by handle name
 		$formBuilderHandle = craft()->request->getPost('formHandle');

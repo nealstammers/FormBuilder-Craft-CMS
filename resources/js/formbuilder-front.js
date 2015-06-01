@@ -3,7 +3,6 @@
   $('#contactForm').submit(function(e) {
     e.preventDefault();
 
-
     var url = '/admin/actions/' + $(this).children("[name=action]").attr('value');
 
     // Validate Parsley
@@ -11,7 +10,6 @@
 
       // Get the post data
       var data = $(this).serialize();
-
 
       // Send it to the server
       $.post(url, data, function(response) {
@@ -24,7 +22,6 @@
           $('#contactForm-notification').html('<p class="error-message">'+response.message+'</p>');
         }
       });
-
     
     } // End parlsey
 
