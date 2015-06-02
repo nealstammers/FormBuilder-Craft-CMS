@@ -5,14 +5,20 @@
 {% if data is defined %}
   <table>
   {% for key, value in data %}
+    {% set field = craft.fields.getFieldByHandle(key) %}
+
     {% if value %}
     <tr>
-      <td><strong>{{ key | replaceUnderscoreWithSpace }}: </strong></td>
+      <td><strong>{{ field.name }}: </strong></td>
       
       {% if value | checkArray == '1' %}
+      <td>
       {% for key, item in value %}
-        <td>{{ item }}</td>
+        {% if item != '' %}
+          {{ item }},  
+        {% endif %}
       {% endfor %}
+      </td>
       {% else %}
       <td>{{ value }}</td>
       {% endif %}

@@ -41,11 +41,8 @@ class FormBuilder_EntriesController extends BaseController
 	public function actionSaveFormEntry()
 	{
 		$this->requirePostRequest();
-    // $this->requireAjaxRequest();
-    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
-    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
-    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
-    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
+    $this->requireAjaxRequest();
+
 		$formBuilderHandle = craft()->request->getPost('formHandle');
 		if (!$formBuilderHandle) { throw new HttpException(404);}
 
@@ -62,31 +59,19 @@ class FormBuilder_EntriesController extends BaseController
     $formBuilderEntry->title      = $form->name;
     $formBuilderEntry->data       = $postData;
 
-    $sendNotification = false;
-    $sendRegistrarNotification = false;
-
-    if ($form->notifyRegistrant && $form->notificationFieldHandleName != '') {
-      $sendRegistrarNotification = true;
-      // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
-      $emailField = craft()->fields->getFieldByHandle($form->notificationFieldHandleName);
-      $form->toEmail = craft()->request->getPost();
-    }
-    var_dump($emailField);
-    // var_dump(craft()->request->getPost('Your_Email'));
-    die();
-
-    if ($form->notifyFormAdmin and $form->toEmail != '') {
-      $sendNotification = true;
-    }
-
+    
     if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
-      if ($sendRegistrarNotification) {
-        $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
+      // Send notification to admin
+      if ($form->notifyFormAdmin && $form->toEmail != '') {
+        $this->_sendEmailNotification($formBuilderEntry, $form);
       }
 
-      if ($sendNotification) {
-        $this->_sendEmailNotification($formBuilderEntry, $form);
+      // Send notification to submitter
+      if ($form->notifyRegistrant && $form->notificationFieldHandleName != '') {
+        $emailField = craft()->fields->getFieldByHandle($form->notificationFieldHandleName);
+        $submitterEmail = $formBuilderEntry->data[$emailField->handle];
+        $this->_sendRegistrantEmailNotification($formBuilderEntry, $form, $submitterEmail);
       }
 
       if (!empty($form->successMessage)) {
@@ -134,18 +119,13 @@ class FormBuilder_EntriesController extends BaseController
 	protected function _sendEmailNotification($record, $form)
 	{  
 		$data = new \stdClass($data);
-		$data->entryId   = $record->id;
-
 		$postData = $record->data;
 		$postData = $this->_filterPostKeys($postData);
-
-		foreach ($postData as $key => $value) {
-			$data->$key = $value;
-		}
 
 		if (craft()->templates->findTemplate($form->notificationTemplatePath)) {
 			$template = $form->notificationTemplatePath;
 		}
+
     if (!$template) {
       $template = $this->defaultEmailTemplate;
     }
@@ -153,7 +133,7 @@ class FormBuilder_EntriesController extends BaseController
     $variables = array(
       'data'  => $postData,
       'form'  => $form,
-      'entry' => $record,
+      'entry' => $record
     );
 
     $message  = craft()->templates->render($template, $variables);
@@ -168,17 +148,12 @@ class FormBuilder_EntriesController extends BaseController
 	//======================================================================
   // Send Email Notification to Submitter
   //======================================================================
-	protected function _sendRegistrantEmailNotification($record, $form)
+	protected function _sendRegistrantEmailNotification($record, $form, $submitterEmail)
 	{
 		$data = new \stdClass($data);
-		$data->entryId   = $record->id;
 
 		$postData = $record->data;
 		$postData = $this->_filterPostKeys($postData);
-
-		foreach ($postData as $key => $value) {
-			$data->$key = $value;
-		}
 
 		if (craft()->templates->findTemplate($form->notificationTemplatePathRegistrant)) {
 			$template = $form->notificationTemplatePathRegistrant;
@@ -194,9 +169,9 @@ class FormBuilder_EntriesController extends BaseController
 			'entry' => $record,
 		);
 
-		$message  = craft()->templates->render($template, $variables);
+		$message = craft()->templates->render($template, $variables);
 
-    if (craft()->formBuilder_entries->sendRegistrantEmailNotification($form, $message, true, null)) {
+    if (craft()->formBuilder_entries->sendRegistrantEmailNotification($form, $message, $submitterEmail, true, null)) {
       return true;
     } else {
       return false;
@@ -211,12 +186,8 @@ class FormBuilder_EntriesController extends BaseController
 		$filterKeys = array(
 			'action',
 			'redirect',
-			'formhandle'
+      'formhandle'
 		);
-		if (isset($post['honeypot'])) {
-			$honeypot = $post['honeypot'];
-			array_push($filterKeys, $honeypot);
-		}
 		if (is_array($post)) {
 			foreach ($post as $k => $v) {
 				if (in_array(strtolower($k), $filterKeys)) {

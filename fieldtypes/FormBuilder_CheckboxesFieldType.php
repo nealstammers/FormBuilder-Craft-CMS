@@ -49,6 +49,7 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
     $required     = $name->required;
     $options      = $this->getTranslatedOptions();
     $instructions = $name->instructions;
+    $handle       = $name->handle;
     
     // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
@@ -61,6 +62,7 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
     $html = craft()->templates->render('_includes/forms/checkboxGroup', array(
       'name'          => $name,
+      'handle'        => $handle,
       'id'            => $id,
       'instructions'  => $instructions,
       'required'      => $required,

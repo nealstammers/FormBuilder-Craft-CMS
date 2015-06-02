@@ -12,7 +12,7 @@
 	(size is defined and size ? null : 'fullwidth')
 ]|filter|join(' ') %}
 
-<div class="field text{% if id %} {{ id }}{% endif %}">
+<div class="fb-field text{% if id %} {{ id }}{% endif %}">
 	{%- if type == 'password' %}<div class="passwordwrapper">{% endif -%}
 
 	<div class="heading">
@@ -28,7 +28,7 @@
 		<input class="{{ class }}" type="{{ type }}"
 			{%- if id is defined %} id="{{ id }}"{% endif %}
 			{%- if size is defined %} size="{{ size }}"{% endif %}
-			{%- if name is defined %} name="{{ name }}"{% endif %}
+			{%- if name is defined %} name="{{ name.handle }}"{% endif %}
 			{%- if value is defined %} value="{{ value }}"{% endif %}
 			{%- if maxlength is defined and maxlength %} maxlength="{{ maxlength }}"{% endif %}
 			{%- if showCharsLeft is defined and showCharsLeft %} data-show-chars-left{% endif %}

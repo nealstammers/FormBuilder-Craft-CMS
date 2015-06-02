@@ -22,12 +22,12 @@
   <table class="data fullwidth collapsible">
 
     {% for name, value in data %}
-
+      {% set field = craft.fields.getFieldByHandle(name) %}
       {% if value %}
 
       <tr>
         
-        <td><strong>{{ name | replaceUnderscoreWithSpace }}</strong></td>
+        <td><strong>{{ field.name }}</strong></td>
 
         {% if value | checkArray == '1' %}
           <td>

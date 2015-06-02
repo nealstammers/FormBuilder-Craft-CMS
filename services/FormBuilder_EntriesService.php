@@ -92,12 +92,11 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 	public function sendEmailNotification($form, $message, $html = true, $email = null)
 	{	
 		$errors = false;
-
 		$email = new EmailModel();
 
 		$email->toEmail		= $form->toEmail;
 		$email->replyTo   = $form->toEmail;
-		$email->fromName  = $form->name;
+		$email->fromName  = craft()->getSiteName() . ' | Submission Notification';
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
 
@@ -114,18 +113,17 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 	//======================================================================
   // Send Email Notification to Submitter
   //======================================================================
-	public function sendRegistrantEmailNotification($form, $message, $html = true, $email = null)
+	public function sendRegistrantEmailNotification($form, $message, $submitterEmail, $html = true, $email = null)
 	{
 		$errors = false;
-		// TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
-		$emailTo = explode(',', $form->toEmail);
-		var_dump($form);
-		die();
 		$email = new EmailModel();
-		$email->toEmail   = $form->toEmail;
+
+		$emailTo = explode(',', $form->toEmail);
+
+		$email->toEmail   = $submitterEmail;
 		$email->fromEmail = $emailTo[0];
 		$email->replyTo   = $emailTo[0];
-		$email->fromName  = 'Submission Notification';
+		$email->fromName  = craft()->getSiteName() . ' | Submission Notification';
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
 
