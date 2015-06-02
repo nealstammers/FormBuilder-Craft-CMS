@@ -11,13 +11,13 @@
 
 {% block content %}
 <section id="create-form">
-	<h1 class="settings-toggle">{{ "Form Settings"|t }}</h1>
 	<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 		<input type="hidden" name="action" value="formBuilder/forms/saveForm">
 		<input type="hidden" name="redirect" value="formbuilder/forms">
 		{{ getCsrfInput() }}
 		{% if form.id %}<input type="hidden" name="formId" value="{{ form.id }}">{% endif %}
 
+		<h1 class="settings-toggle">{{ "Form Settings"|t }}</h1>
 		<div id="settings-container">
 		<div class="fieldset">
 		{{ forms.textField({
@@ -140,7 +140,7 @@
 			{% if form.id %}
 				{% set formId = craft.formBuilder.getFormById(form.id) %}
 				{% set fields = formId.fieldLayout.getFieldLayout().getFields() %}
-				{% set groupOptions = [{label: 'Select Email Field', value: '0'}] %}
+				{% set groupOptions = [{label: 'Select Email Field', value: ''}] %}
 				{% for field in fields %}
 					{% set item = field.getField(field) %}
 					{% set groupOptions = groupOptions|merge([{ label: item.name, value: item.handle }]) %}

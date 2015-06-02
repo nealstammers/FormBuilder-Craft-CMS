@@ -99,18 +99,23 @@ $color-green: #4bc51d;
     &:before, &:after {
       content: "";
       display: block;
-      @include size(10px 2px);
       background: $color-red;
+      @include size(10px 2px);
       @include position(absolute, 17px 20px null null);
       @include transition(all .4s cubic-bezier(0.82, 0.17, 0.04, 0.85));
+      opacity: .5;
     }
     &:before { @include transform(rotate(90deg)); }
     // Active
     &.active {
+      &:before, &:after { opacity: 1; }
       &:before { @include transform(rotate(0)); }
     }
     // Hover
     &:hover {
+      &:before, &:after {
+        opacity: 1; 
+      }
     }
   }
   .fieldset { 
@@ -218,7 +223,7 @@ $color-green: #4bc51d;
     @include user-select(none);
     box-sizing: border-box;
     &:hover {
-      background: $color-green;
+      background-image: linear-gradient(#fafafa, white);
     }
   }
 

@@ -3,9 +3,10 @@ namespace Craft;
 
 class FormBuilder_FormsController extends BaseController
 {
-	/**
-	 * Form index
-	 */
+
+	//======================================================================
+	// Show All Forms
+	//======================================================================
 	public function actionFormIndex()
 	{	
 		$variables['forms'] = craft()->formBuilder_forms->getAllForms();
@@ -15,13 +16,9 @@ class FormBuilder_FormsController extends BaseController
 		return $this->renderTemplate('formbuilder/forms', $variables);
 	}
 
-	/**
-	 * Edit a from.
-	 *
-	 * @param array $variables
-	 * @throws HttpException
-	 * @throws Exception
-	 */
+	//======================================================================
+	// Edit Form
+	//======================================================================
 	public function actionEditForm(array $variables = array())
 	{
 		$variables['brandNewForm'] = false;
@@ -45,16 +42,15 @@ class FormBuilder_FormsController extends BaseController
 		$this->renderTemplate('formbuilder/forms/_edit', $variables);
 	}
 
-	/**
-	 * Saves a form
-	 */
+	//======================================================================
+	// Save New Form
+	//======================================================================
 	public function actionSaveForm()
 	{
 		$this->requirePostRequest();
 
 		$form = new FormBuilder_FormModel();
 
-		// Shared attributes
 		$form->id         														= craft()->request->getPost('formId');
 		$form->name       														= craft()->request->getPost('name');
 		$form->handle     														= craft()->request->getPost('handle');
@@ -66,14 +62,14 @@ class FormBuilder_FormsController extends BaseController
 		$form->notificationTemplatePath     					= craft()->request->getPost('notificationTemplatePath');
 		$form->notifyRegistrant     									= craft()->request->getPost('notifyRegistrant');
 		$form->notificationTemplatePathRegistrant     = craft()->request->getPost('notificationTemplatePathRegistrant');
+		
+		# TODO: Validate agains Email Field Type
 		$form->notificationFieldHandleName     				= craft()->request->getPost('notificationFieldHandleName');
 
-		// Set the field layout
 		$fieldLayout = craft()->fields->assembleLayoutFromPost();
 		$fieldLayout->type = ElementType::Asset;
 		$form->setFieldLayout($fieldLayout);
 
-		// Save it
 		if (craft()->formBuilder_forms->saveForm($form)) {
 			craft()->userSession->setNotice(Craft::t('Form saved.'));
 			$this->redirectToPostedUrl($form);
@@ -81,15 +77,14 @@ class FormBuilder_FormsController extends BaseController
 			craft()->userSession->setError(Craft::t('Couldn’t save form.'));
 		}
 
-		// Send the form back to the template
 		craft()->urlManager->setRouteVariables(array(
 			'form' => $form
 		));
 	}
 
-	/**
-	 * Deletes a form.
-	 */
+	//======================================================================
+	// Delete Form
+	//======================================================================
 	public function actionDeleteForm()
 	{
 		$this->requirePostRequest();
@@ -101,6 +96,9 @@ class FormBuilder_FormsController extends BaseController
 		$this->returnJson(array('success' => true));
 	}
 
+	//======================================================================
+	// List All Tabs
+	//======================================================================
 	protected function _getTabs()
 	{
 		return array(

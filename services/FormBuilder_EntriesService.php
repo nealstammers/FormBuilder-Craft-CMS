@@ -86,29 +86,22 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		}	else { return false; }
 	}
 
-	/**
-	 * 
-	 * Send Email notification
-	 * 
-	 */
+	//======================================================================
+  // Send Email Notification to Admin
+  //======================================================================
 	public function sendEmailNotification($form, $message, $html = true, $email = null)
 	{	
-
-		// Generic errors bool
 		$errors = false;
 
 		$email = new EmailModel();
 
-		// $email->fromEmail = $form->fromEmail;
-		$email->replyTo   = $form->yourEmail;
-		// $email->sender    = $form->fromEmail;
-		$email->fromName  = 'FormBuilder Plugin';
+		$email->toEmail		= $form->toEmail;
+		$email->replyTo   = $form->toEmail;
+		$email->fromName  = $form->name;
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
 
-		// Support for sending multiple emails
 		$emailTo = explode(',', $form->toEmail);
-
 		foreach ($emailTo as $emailAddress) {
 			$email->toEmail = trim($emailAddress);
 			if (!craft()->email->sendEmail($email)) {
@@ -118,26 +111,24 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		return $errors ? false : true;
 	}
 
-	/**
-	 * 
-	 * Send Email notification to registrant
-	 * 
-	 */
+	//======================================================================
+  // Send Email Notification to Submitter
+  //======================================================================
 	public function sendRegistrantEmailNotification($form, $message, $html = true, $email = null)
 	{
-		// Generic errors bool
 		$errors = false;
-
-		// If form sending to multiple emails, only first one will be picked as the replyTo/fromEmail
+		// TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
 		$emailTo = explode(',', $form->toEmail);
-
+		var_dump($form);
+		die();
 		$email = new EmailModel();
-		$email->toEmail   = $form->yourEmail;
+		$email->toEmail   = $form->toEmail;
 		$email->fromEmail = $emailTo[0];
 		$email->replyTo   = $emailTo[0];
 		$email->fromName  = 'Submission Notification';
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
+
 
 		if (!craft()->email->sendEmail($email)) {
 			$errors = true;

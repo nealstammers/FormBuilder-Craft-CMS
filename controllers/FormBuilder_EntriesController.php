@@ -7,22 +7,19 @@ class FormBuilder_EntriesController extends BaseController
   protected $defaultEmailTemplate = 'formbuilder/email/default';
 	protected $defaultRegistrantEmailTemplate = 'formbuilder/email/registrant';
 	
-	/**
-	 * View All Entries
-	 */
+	//======================================================================
+  // View All Entries
+  //======================================================================
 	public function actionEntriesIndex()
 	{
-		// Get the data
 		$variables['entries'] = craft()->formBuilder_entries->getAllEntries();
 		$variables['tabs'] = $this->_getTabs();
-
-		// Render entries template
 		$this->renderTemplate('formbuilder/entries/index', $variables);
 	}
 
-  /**
-   * View Single Entry
-   */
+  //======================================================================
+  // View Single Entry
+  //======================================================================
 	public function actionViewEntry(array $variables = array())
 	{
 		$entry              = craft()->formBuilder_entries->getFormEntryById($variables['entryId']);
@@ -38,100 +35,86 @@ class FormBuilder_EntriesController extends BaseController
 		$this->renderTemplate('formbuilder/entries/_view', $variables);
 	}
 
-	/**
-	 * Save Form Entry
-	 */
+	//======================================================================
+  // Save Form Entry
+  //======================================================================
 	public function actionSaveFormEntry()
 	{
-		// Require a post request
 		$this->requirePostRequest();
-    $this->requireAjaxRequest();
-
-		// Get form by handle name
+    // $this->requireAjaxRequest();
+    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
+    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
+    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
+    // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
 		$formBuilderHandle = craft()->request->getPost('formHandle');
 		if (!$formBuilderHandle) { throw new HttpException(404);}
 
-		// Get the form model, need this to save the entry
 		$form = craft()->formBuilder_entries->getFormByHandle($formBuilderHandle);
 		if (!$form) { throw new HttpException(404); }
 
-    // Collect form submission data
     $data = craft()->request->getPost();
 
-    // Filter out unused fields (action, handle, etc)
     $postData = $this->_filterPostKeys($data);
 
-    // New form entry model
     $formBuilderEntry = new FormBuilder_EntryModel();
 
-    // Set entry attributes
     $formBuilderEntry->formId     = $form->id;
     $formBuilderEntry->title      = $form->name;
     $formBuilderEntry->data       = $postData;
 
-
-    // ###########################################################
-    // Notifications
-    // ###########################################################
     $sendNotification = false;
     $sendRegistrarNotification = false;
-    
-    // Notify Registrar
-    if ($form->notifyRegistrant and $form->notificationFieldHandleName != '') {
+
+    if ($form->notifyRegistrant && $form->notificationFieldHandleName != '') {
       $sendRegistrarNotification = true;
+      // TODO: CONVERT ALL FORM POST DATA "NAME" TO fields handle name!!!!!!!
+      $emailField = craft()->fields->getFieldByHandle($form->notificationFieldHandleName);
+      $form->toEmail = craft()->request->getPost();
     }
-    // Notify Form Admin
+    var_dump($emailField);
+    // var_dump(craft()->request->getPost('Your_Email'));
+    die();
+
     if ($form->notifyFormAdmin and $form->toEmail != '') {
       $sendNotification = true;
     }
 
-
-    // ###########################################################
-    // Save Form Entry To Database
-    // ###########################################################
     if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
-      // Notify Registrar if true
       if ($sendRegistrarNotification) {
         $this->_sendRegistrantEmailNotification($formBuilderEntry, $form);
       }
 
-      // Notify Form Owner if true
       if ($sendNotification) {
         $this->_sendEmailNotification($formBuilderEntry, $form);
       }
 
-      // Get success message from form settings 
       if (!empty($form->successMessage)) {
         $successMessage = $form->successMessage;
       } else {
         $successMessage =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
       }
 
-      // Return success message
       $this->returnJson(
         ['success' => true, 'message' => $successMessage]
       );
 
     } else {
-      // Get error message from form settings 
       if (!empty($form->errorMessage)) {
         $errorMessage = $form->errorMessage;
       } else {
         $errorMessage =  Craft::t('We\'re sorry, but something has gone wrong.');
       }
 
-      // Return error message
       $this->returnJson(
         ['error' => true, 'message' => $errorMessage]
       );
     }
-
 	}
 
-	/**
-	 * Delete Entry
-	 */
+	//======================================================================
+  // Delete Form Entry
+  //======================================================================
 	public function actionDeleteEntry()
 	{
 		$this->requirePostRequest();
@@ -143,71 +126,60 @@ class FormBuilder_EntriesController extends BaseController
 			$this->redirectToPostedUrl();
 			craft()->userSession->setError(Craft::t('Couldn’t delete entry.'));
 		}
-
 	}
 
-	/**
-   * TODO: FIXED THIS FUNCTION
-	 * Send Email Notification
-	 */
+	//======================================================================
+  // Send Email Notification to Admin
+  //======================================================================
 	protected function _sendEmailNotification($record, $form)
 	{  
-
-		// Put in work setting up data for the email template.
 		$data = new \stdClass($data);
 		$data->entryId   = $record->id;
 
-		$postData = unserialize($record->data);
+		$postData = $record->data;
 		$postData = $this->_filterPostKeys($postData);
 
 		foreach ($postData as $key => $value) {
 			$data->$key = $value;
 		}
 
-		// Email template
 		if (craft()->templates->findTemplate($form->notificationTemplatePath)) {
 			$template = $form->notificationTemplatePath;
 		}
+    if (!$template) {
+      $template = $this->defaultEmailTemplate;
+    }
 
-		if (!$template) {
-			$template = $this->defaultEmailTemplate;
-		}
+    $variables = array(
+      'data'  => $postData,
+      'form'  => $form,
+      'entry' => $record,
+    );
 
-		$variables = array(
-			'data'  => $postData,
-			'form'  => $form,
-			'entry' => $record,
-		);
+    $message  = craft()->templates->render($template, $variables);
 
-		$message  = craft()->templates->render($template, $variables);
-
-		// Send notification to form owner
 		if (craft()->formBuilder_entries->sendEmailNotification($form, $message, true, null)) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 
-	/**
-   * TODO: FIXED THIS FUNCTION
-	 * Send Email Notification
-	 */
+	//======================================================================
+  // Send Email Notification to Submitter
+  //======================================================================
 	protected function _sendRegistrantEmailNotification($record, $form)
 	{
-		// Put in work setting up data for the email template.
 		$data = new \stdClass($data);
 		$data->entryId   = $record->id;
 
-		$postData = unserialize($record->data);
+		$postData = $record->data;
 		$postData = $this->_filterPostKeys($postData);
 
 		foreach ($postData as $key => $value) {
 			$data->$key = $value;
 		}
 
-		// Email template
 		if (craft()->templates->findTemplate($form->notificationTemplatePathRegistrant)) {
 			$template = $form->notificationTemplatePathRegistrant;
 		}
@@ -224,18 +196,16 @@ class FormBuilder_EntriesController extends BaseController
 
 		$message  = craft()->templates->render($template, $variables);
 
-    // Send notification to form owner
     if (craft()->formBuilder_entries->sendRegistrantEmailNotification($form, $message, true, null)) {
       return true;
     } else {
       return false;
     }
-
 	}
 
-  /**
-   * Filter out unused post data
-   */
+  //======================================================================
+  // Filter Out Unused Post Data
+  //======================================================================
 	protected function _filterPostKeys($post)
 	{
 		$filterKeys = array(
@@ -257,9 +227,9 @@ class FormBuilder_EntriesController extends BaseController
 		return $post;
 	}
 
-  /**
-   * Get Page Tabs
-   */
+  //======================================================================
+  // Get All Tabs
+  //======================================================================
 	protected function _getTabs()
 	{
 		return array(

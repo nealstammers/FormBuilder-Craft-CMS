@@ -6,7 +6,6 @@ class FormBuilderVariable
 
   protected $inputJsClass;
 
-
 	function entries()
 	{
 		return craft()->elements->getCriteria('FormBuilder_Entry');
@@ -53,9 +52,7 @@ class FormBuilderVariable
     $requiredField = $field->required; // Get Required Field
     $theField->required = $requiredField; // Add Required Value to Field if true
 
-    //
     // UPDATE TEMPLATE PATHS
-    //
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates'); // Change template path to FormBuilder
     $getPluginInputHtml = $fieldType->getInputHtml($theField, null); // Load our input html 
     craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath()); // Reset tempalte path to Craft
