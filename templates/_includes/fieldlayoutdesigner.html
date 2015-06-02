@@ -42,11 +42,10 @@
 
 <div id="fieldlayoutform" class="fieldlayoutform">
 	
-	<h1>{{ "Fields"|t }}</h1>
-
 	{% if customizableTabs %}
-		<div class="newtabbtn-container">
+		<div class="newtabbtn-container buttons">
 			<div class="btn icon">{{ "Add Fieldset"|t }}</div>
+			<a href="/admin/settings/fields" class="create-field">Create New Field</a>
 		</div>
 	{% endif %}
 

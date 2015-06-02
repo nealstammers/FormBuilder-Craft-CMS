@@ -10,6 +10,7 @@ class FormBuilder_FormsController extends BaseController
 	{	
 		$variables['forms'] = craft()->formBuilder_forms->getAllForms();
 		$variables['tabs'] = $this->_getTabs();
+		$variables['settings'] = craft()->plugins->getPlugin('formbuilder');
 
 		return $this->renderTemplate('formbuilder/forms', $variables);
 	}
@@ -40,11 +41,6 @@ class FormBuilder_FormsController extends BaseController
 		}
 
 		$variables['tabs'] = $this->_getTabs();
-
-		// $variables['crumbs'] = array(
-		// 	array('label' => Craft::t('Entries'), 'url' => UrlHelper::getUrl('entries')),
-		// 	array('label' => Craft::t('Forms'), 'url' => UrlHelper::getUrl('formbuilder/forms')),
-		// );
 
 		$this->renderTemplate('formbuilder/forms/_edit', $variables);
 	}

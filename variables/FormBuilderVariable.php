@@ -29,12 +29,12 @@ class FormBuilderVariable
 
   function includeJs()
   {
-    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/js/formbuilder-front.js'));
+    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/js/formbuilder-form.js'));
   }
 
   function includeCss()
   {
-    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/css/formbuilder-front.css'));
+    return craft()->templates->includeJsFile(UrlHelper::getResourceUrl('formbuilder/css/formbuilder-form.css'));
   }
 
 
