@@ -128,6 +128,7 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		$formRecord->name       													= $form->name;
 		$formRecord->handle     													= $form->handle;
 		$formRecord->subject    													= $form->subject;
+		$formRecord->ajaxSubmit    												= $form->ajaxSubmit;
 		$formRecord->successMessage    										= $form->successMessage;
 		$formRecord->errorMessage    											= $form->errorMessage;
 		$formRecord->notifyFormAdmin     									= $form->notifyFormAdmin;

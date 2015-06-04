@@ -55,6 +55,7 @@ class FormBuilder_FormsController extends BaseController
 		$form->name       														= craft()->request->getPost('name');
 		$form->handle     														= craft()->request->getPost('handle');
 		$form->subject     														= craft()->request->getPost('subject');
+		$form->ajaxSubmit     												= craft()->request->getPost('ajaxSubmit');
 		$form->successMessage     										= craft()->request->getPost('successMessage');
 		$form->errorMessage     											= craft()->request->getPost('errorMessage');
 		$form->notifyFormAdmin     										= craft()->request->getPost('notifyFormAdmin');
@@ -62,13 +63,30 @@ class FormBuilder_FormsController extends BaseController
 		$form->notificationTemplatePath     					= craft()->request->getPost('notificationTemplatePath');
 		$form->notifyRegistrant     									= craft()->request->getPost('notifyRegistrant');
 		$form->notificationTemplatePathRegistrant     = craft()->request->getPost('notificationTemplatePathRegistrant');
-		
-		# TODO: Validate agains Email Field Type
 		$form->notificationFieldHandleName     				= craft()->request->getPost('notificationFieldHandleName');
+
+		$emailField = craft()->fields->getFieldByHandle(craft()->request->getPost('notificationFieldHandleName'));
 
 		$fieldLayout = craft()->fields->assembleLayoutFromPost();
 		$fieldLayout->type = ElementType::Asset;
 		$form->setFieldLayout($fieldLayout);
+
+		// 
+		// 
+		//  VALIDATE notifyRegistrant
+		//  VALIDATE notificationFieldHandleName
+		// 
+		// 
+		// 
+		// Validate notifyRegistrant Email
+		if ($form->notifyRegistrant) {
+
+			if ($emailField) {
+				if ($emailField->type == 'FormBuilder_Email') {
+					var_dump('it is email');
+				}
+			}
+		}
 
 		if (craft()->formBuilder_forms->saveForm($form)) {
 			craft()->userSession->setNotice(Craft::t('Form saved.'));

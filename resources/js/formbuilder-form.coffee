@@ -18,11 +18,9 @@ ajaxForm = ->
       # Send it to the server
       $.post url, data, (response) ->
         if response.success
-          console.log response
           notificationContainer.html '<p class="success-message">' + response.message + '</p>'
           theForm[0].reset()
         else
-          console.log response
           notificationContainer.html '<p class="error-message">' + response.message + '</p>'
 
 $(ajaxForm)

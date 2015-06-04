@@ -16,7 +16,7 @@ class FormBuilder_FormModel extends BaseModel
 	/**
 	 * @access protected
 	 * @return array
-	 */
+	 */ 
 	protected function defineAttributes()
 	{
 		return array(
@@ -24,6 +24,7 @@ class FormBuilder_FormModel extends BaseModel
 			'name'          													=> AttributeType::String,
 			'handle'        													=> AttributeType::String,
 			'subject'       													=> AttributeType::String,
+			'ajaxSubmit'       												=> AttributeType::Bool,
 			'successMessage'       										=> AttributeType::String,
 			'errorMessage'       											=> AttributeType::String,
 			'toEmail'      														=> AttributeType::String,

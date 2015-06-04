@@ -21,14 +21,15 @@ class FormBuilder_FormRecord extends BaseRecord
 			'name'          											=> array(AttributeType::Name, 'required' => true),
 			'handle'        											=> array(AttributeType::Handle, 'required' => true),
 			'subject'       											=> AttributeType::Name,
+			'ajaxSubmit'       										=> AttributeType::Bool,
 			'successMessage'       								=> AttributeType::String,
 			'errorMessage'       									=> AttributeType::String,
 			'toEmail'       											=> AttributeType::Name,
 			'notifyFormAdmin'       							=> AttributeType::Bool,
-			'notificationTemplatePath'						=> AttributeType::String,
+			'notificationTemplatePath'						=> array(AttributeType::String, 'required' => true),
 			'notifyRegistrant'       							=> AttributeType::Bool,
 			'notificationFieldHandleName'					=> AttributeType::String,
-			'notificationTemplatePathRegistrant'	=> AttributeType::String,
+			'notificationTemplatePathRegistrant'	=> array(AttributeType::String, 'required' => true),
 			'fieldLayoutId' 											=> AttributeType::Number
 		);
 	}

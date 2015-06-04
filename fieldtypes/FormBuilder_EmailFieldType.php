@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Class CheckboxesFieldType
+ * Class PlainTextFieldType
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
@@ -11,16 +11,8 @@ namespace Craft;
  * @package   craft.app.fieldtypes
  * @since     1.0
  */
-class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
+class FormBuilder_EmailFieldType extends BaseFieldType
 {
-  // Properties
-  // =========================================================================
-
-  /**
-   * @var bool
-   */
-  protected $multi = true;
-
   // Public Methods
   // =========================================================================
 
@@ -31,43 +23,49 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
    */
   public function getName()
   {
-    return Craft::t('| FormBuilder | Checkboxes');
+    return Craft::t('| FormBuilder | Email Address');
+  }
+
+  /**
+   * @inheritDoc ISavableComponentType::getSettingsHtml()
+   *
+   * @return string|null
+   */
+  public function getSettingsHtml()
+  {
+    $settings = craft()->templates->render('_components/fieldtypes/PlainText/settings', array(
+      'settings' => $this->getSettings()
+    ));
+
+    return $settings;
   }
 
   /**
    * @inheritDoc IFieldType::getInputHtml()
    *
    * @param string $name
-   * @param mixed  $values
+   * @param mixed  $value
    *
    * @return string
    */
-  public function getInputHtml($name, $values)
+  public function getInputHtml($name, $value)
   {
     // Variables
     $fieldId      = $name->id;
     $required     = $name->required;
-    $options      = $this->getTranslatedOptions();
     $instructions = $name->instructions;
-    $handle       = $name->handle;
-    
+
     // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
-    // If this is a new entry, look for any default options
-    if ($this->isFresh()) {
-      $values = $this->getDefaultValue();
-    }
-
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
-    $html = craft()->templates->render('_includes/forms/checkboxGroup', array(
+    $html = craft()->templates->render('_includes/forms/email', array(
       'id'            => $id,
       'name'          => $name,
-      'handle'        => $handle,
       'instructions'  => $instructions,
+      'value'         => $value,
       'required'      => $required,
-      'options'       => $options,
-      'values'        => $values
+      'settings'      => $this->getSettings()
     ));
     craft()->path->setTemplatesPath(craft()->path->getTemplatesPath());
 
@@ -78,12 +76,18 @@ class FormBuilder_CheckboxesFieldType extends BaseOptionsFieldType
   // =========================================================================
 
   /**
-   * @inheritDoc BaseOptionsFieldType::getOptionsSettingsLabel()
+   * @inheritDoc BaseSavableComponentType::defineSettings()
    *
-   * @return string
+   * @return array
    */
-  protected function getOptionsSettingsLabel()
+  protected function defineSettings()
   {
-    return Craft::t('Checkbox Options');
+    return array(
+      'placeholder'   => array(AttributeType::String),
+      'multiline'     => array(AttributeType::Bool),
+      'initialRows'   => array(AttributeType::Number, 'min' => 1, 'default' => 4),
+      'maxLength'     => array(AttributeType::Number, 'min' => 0),
+    );
   }
+
 }

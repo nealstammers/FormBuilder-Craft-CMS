@@ -2,9 +2,7 @@
 	{% include "_includes/forms/errorList" %}
 {% endmacro %}
 
-
 {# Inputs #}
-
 
 {% macro hidden(config) -%}
 	{% include "_includes/forms/hidden" with config only %}
@@ -13,6 +11,10 @@
 
 {% macro text(config) %}
 	{% include "_includes/forms/text" with config only %}
+{% endmacro %}
+
+{% macro email(config) %}
+	{% include "_includes/forms/email" with config only %}
 {% endmacro %}
 
 

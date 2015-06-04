@@ -14,11 +14,9 @@ ajaxForm = function() {
       data = $(this).serialize();
       return $.post(url, data, function(response) {
         if (response.success) {
-          console.log(response);
           notificationContainer.html('<p class="success-message">' + response.message + '</p>');
           return theForm[0].reset();
         } else {
-          console.log(response);
           return notificationContainer.html('<p class="error-message">' + response.message + '</p>');
         }
       });

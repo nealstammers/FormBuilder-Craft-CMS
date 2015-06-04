@@ -60,12 +60,12 @@ class FormBuilder_MultiSelectFieldType extends BaseOptionsFieldType
 
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
     $html = craft()->templates->render('_includes/forms/multiselect', array(
-      'name'    => $name,
       'id'            => $id,
+      'name'          => $name,
       'instructions'  => $instructions,
       'required'      => $required,
-      'values'  => $values,
-      'options' => $options
+      'values'        => $values,
+      'options'       => $options
     ));
     craft()->path->setTemplatesPath(craft()->path->getTemplatesPath());
 

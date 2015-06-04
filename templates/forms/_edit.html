@@ -54,6 +54,19 @@
 			errors: form.getErrors('subject'),
 			required: false
 		}) }}
+
+		{{ forms.checkboxField({
+			label: "Use AJAX?"|t,
+			instructions: "Should we submit the form via ajax? This will also use javascript to validate 'required' fields."|t,
+			id: 'ajaxSubmit',
+			class: 'ajaxSubmit',
+			name: 'ajaxSubmit',
+			value: 1,
+			checked: form.ajaxSubmit,
+			errors: form.getErrors('ajaxSubmit'),
+			required: false
+		}) }}
+
 		</div>
 		</div>
 

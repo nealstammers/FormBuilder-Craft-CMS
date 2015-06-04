@@ -24,7 +24,7 @@
 		{%- if toggle is defined %} data-target="{{ toggle }}"{% endif %}
 		{%- if reverseToggle is defined %} data-reverse-target="{{ reverseToggle }}"{% endif %}
 		{%- if required is defined %} {%- if required == '1' %} required{% endif %}{% endif %}
-		 data-parsley-required-message="{{parentLabel}} field is required">
+		 {%- if parentLabel is defined ? parentLabel : null %} data-parsley-required-message="{{parentLabel}} field is required"{% endif %}>
 	{%- if label is defined %}&nbsp;{{ label|raw }}{% endif %}
 
 {% endspaceless -%}
