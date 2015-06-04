@@ -10,7 +10,7 @@
 {%- set id = (id is defined ? id : null) %}
 {%- set hasOptgroups = false -%}
 
-<div class="fb-field select{% if id %} {{ id }}{% endif %}">
+<div class="field select{% if id %} {{ id }}{% endif %}">
 	
 	<div class="heading">
 	{% if label %}
@@ -51,3 +51,6 @@
 	</select>
 
 </div>
+
+
+

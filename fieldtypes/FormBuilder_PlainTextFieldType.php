@@ -1,36 +1,19 @@
 <?php
 namespace Craft;
 
-/**
- * Class PlainTextFieldType
- *
- * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
- * @package   craft.app.fieldtypes
- * @since     1.0
- */
 class FormBuilder_PlainTextFieldType extends BaseFieldType
 {
-  // Public Methods
-  // =========================================================================
-
-  /**
-   * @inheritDoc IComponentType::getName()
-   *
-   * @return string
-   */
+  //======================================================================
+  // Get FieldType Name
+  //======================================================================
   public function getName()
   {
     return Craft::t('| FormBuilder | Plain Text');
   }
 
-  /**
-   * @inheritDoc ISavableComponentType::getSettingsHtml()
-   *
-   * @return string|null
-   */
+ //======================================================================
+  // Get Settings HTML
+  //======================================================================
   public function getSettingsHtml()
   {
     $settings = craft()->templates->render('_components/fieldtypes/PlainText/settings', array(
@@ -40,11 +23,9 @@ class FormBuilder_PlainTextFieldType extends BaseFieldType
     return $settings;
   }
 
-  /**
-   * @inheritDoc IFieldType::defineContentAttribute()
-   *
-   * @return mixed
-   */
+ //======================================================================
+  // Define Content Attribute
+  //======================================================================
   public function defineContentAttribute()
   {
     $maxLength = $this->getSettings()->maxLength;
@@ -58,22 +39,15 @@ class FormBuilder_PlainTextFieldType extends BaseFieldType
     return array(AttributeType::String, 'column' => $columnType, 'maxLength' => $maxLength);
   }
 
-  /**
-   * @inheritDoc IFieldType::getInputHtml()
-   *
-   * @param string $name
-   * @param mixed  $value
-   *
-   * @return string
-   */
+  //======================================================================
+  // Get Input HTML
+  //======================================================================
   public function getInputHtml($name, $value)
   {
-    // Variables
     $fieldId      = $name->id;
     $required     = $name->required;
     $instructions = $name->instructions;
 
-    // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
@@ -90,14 +64,9 @@ class FormBuilder_PlainTextFieldType extends BaseFieldType
     return $html;
   }
 
-  // Protected Methods
-  // =========================================================================
-
-  /**
-   * @inheritDoc BaseSavableComponentType::defineSettings()
-   *
-   * @return array
-   */
+ //======================================================================
+  // Define Settings
+  //======================================================================
   protected function defineSettings()
   {
     return array(

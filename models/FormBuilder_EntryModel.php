@@ -6,15 +6,17 @@ class FormBuilder_EntryModel extends BaseElementModel
 
 	protected $elementType = 'FormBuilder';
 
+	//======================================================================
+  // Function 
+  //======================================================================
 	function __toString()
 	{
 		return $this->id;
 	}
 
-	/**
-	 * @access protected
-	 * @return array
-	 */
+	//======================================================================
+  // Define Attributes
+  //======================================================================
 	protected function defineAttributes()
 	{
 		return array_merge(parent::defineAttributes(), array(
@@ -25,46 +27,44 @@ class FormBuilder_EntryModel extends BaseElementModel
 		));
 	}
 
-	/**
-	 * Returns whether the current user can edit the element.
-	 *
-	 * @return bool
-	 */
+	//======================================================================
+  // Define if editable
+  //======================================================================
 	public function isEditable()
 	{
 		return true;
 	}
 
-	/**
-	 * Returns the element's CP edit URL.
-	 *
-	 * @return string|false
-	 */
+	//======================================================================
+	// Get Control Panel Edit Url
+	//======================================================================
 	public function getCpEditUrl()
 	{
 		return UrlHelper::getCpUrl('formbuilder/entries/'.$this->id);
 	}
 
-	/**
-	 * Normalize Data For Elements Table
-	 *
-	 */
+	//======================================================================
+	// Normalize Data For Elements Table
+	//======================================================================
 	public function _normalizeDataForElementsTable()
 	{
 		$data = json_decode($this->data, true);
 
-		// Pop off the first (2) items from the data array
+		// Pop off the first (4) items from the data array
 		$data = array_slice($data, 0, 4);
 
 		$newData = '<ul>';
 
 		foreach ($data as $key => $value) {	
+
+			$fieldHandle = craft()->fields->getFieldByHandle($key);
+
 			$capitalize = ucfirst($key);
 			$removeUnderscore = str_replace('_', ' ', $key);
 			$valueArray = is_array($value);
 
 			if ($valueArray == '1') {
-				$newData .= '<li class="left icon" style="margin-right:10px;"><strong>' . $removeUnderscore . '</strong>: ';
+				$newData .= '<li class="left icon" style="margin-right:10px;"><strong>' . $fieldHandle . '</strong>: ';
 				foreach ($value as $item) {
 					if ($item != '') {
 						$newData .= $item;
@@ -73,7 +73,7 @@ class FormBuilder_EntryModel extends BaseElementModel
 				}
 			} else {
 				if ($value != ''){
-					$newData .= '<li class="left icon" style="margin-right:10px;"><strong>' . $removeUnderscore . '</strong>: ' . $value . '</li>';
+					$newData .= '<li class="left icon" style="margin-right:10px;"><strong>' . $fieldHandle . '</strong>: ' . $value . '</li>';
 				}
 			}
 		}

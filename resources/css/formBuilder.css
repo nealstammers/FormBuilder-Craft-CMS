@@ -29,8 +29,6 @@
 #create-form input[type=text] { box-shadow: none; border: 1px solid rgba(0, 0, 0, 0.2); padding: 12px; -webkit-transition: border 0.5s ease; -moz-transition: border 0.5s ease; transition: border 0.5s ease; }
 #create-form input[type=text]:focus { border: 1px solid rgba(0, 0, 0, 0.5); }
 
-#notifications .notification.notice { box-shadow: none; border-radius: 0; padding: 10px 40px; }
-
 #notifications-container { width: 100%; height: 100%; }
 #notifications-container hr { margin: 14px 0 !important; }
 

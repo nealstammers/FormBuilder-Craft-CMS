@@ -65,28 +65,9 @@ class FormBuilder_FormsController extends BaseController
 		$form->notificationTemplatePathRegistrant     = craft()->request->getPost('notificationTemplatePathRegistrant');
 		$form->notificationFieldHandleName     				= craft()->request->getPost('notificationFieldHandleName');
 
-		$emailField = craft()->fields->getFieldByHandle(craft()->request->getPost('notificationFieldHandleName'));
-
 		$fieldLayout = craft()->fields->assembleLayoutFromPost();
 		$fieldLayout->type = ElementType::Asset;
 		$form->setFieldLayout($fieldLayout);
-
-		// 
-		// 
-		//  VALIDATE notifyRegistrant
-		//  VALIDATE notificationFieldHandleName
-		// 
-		// 
-		// 
-		// Validate notifyRegistrant Email
-		if ($form->notifyRegistrant) {
-
-			if ($emailField) {
-				if ($emailField->type == 'FormBuilder_Email') {
-					var_dump('it is email');
-				}
-			}
-		}
 
 		if (craft()->formBuilder_forms->saveForm($form)) {
 			craft()->userSession->setNotice(Craft::t('Form saved.'));

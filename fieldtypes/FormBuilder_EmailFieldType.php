@@ -1,36 +1,19 @@
 <?php
 namespace Craft;
 
-/**
- * Class PlainTextFieldType
- *
- * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
- * @package   craft.app.fieldtypes
- * @since     1.0
- */
 class FormBuilder_EmailFieldType extends BaseFieldType
 {
-  // Public Methods
-  // =========================================================================
-
-  /**
-   * @inheritDoc IComponentType::getName()
-   *
-   * @return string
-   */
+  //======================================================================
+  // Get FieldType Name
+  //======================================================================
   public function getName()
   {
     return Craft::t('| FormBuilder | Email Address');
   }
 
-  /**
-   * @inheritDoc ISavableComponentType::getSettingsHtml()
-   *
-   * @return string|null
-   */
+  //======================================================================
+  // Get Settings HTML
+  //======================================================================
   public function getSettingsHtml()
   {
     $settings = craft()->templates->render('_components/fieldtypes/PlainText/settings', array(
@@ -40,22 +23,15 @@ class FormBuilder_EmailFieldType extends BaseFieldType
     return $settings;
   }
 
-  /**
-   * @inheritDoc IFieldType::getInputHtml()
-   *
-   * @param string $name
-   * @param mixed  $value
-   *
-   * @return string
-   */
+  //======================================================================
+  // Get Input HTML
+  //======================================================================
   public function getInputHtml($name, $value)
   {
-    // Variables
     $fieldId      = $name->id;
     $required     = $name->required;
     $instructions = $name->instructions;
 
-    // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
     craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
@@ -72,14 +48,9 @@ class FormBuilder_EmailFieldType extends BaseFieldType
     return $html;
   }
 
-  // Protected Methods
-  // =========================================================================
-
-  /**
-   * @inheritDoc BaseSavableComponentType::defineSettings()
-   *
-   * @return array
-   */
+  //======================================================================
+  // Define Settings
+  //======================================================================
   protected function defineSettings()
   {
     return array(
@@ -89,5 +60,4 @@ class FormBuilder_EmailFieldType extends BaseFieldType
       'maxLength'     => array(AttributeType::Number, 'min' => 0),
     );
   }
-
 }

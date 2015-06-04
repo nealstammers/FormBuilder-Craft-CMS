@@ -102,7 +102,7 @@
 
 
 {% macro field(config, input) %}
-	{% include "_includes/forms/field" with config|merge({ input: input }) only %}
+	{% include "formbuilder/_includes/forms/field" with config|merge({ input: input }) only %}
 {% endmacro %}
 
 

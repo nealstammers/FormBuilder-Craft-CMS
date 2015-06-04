@@ -3,18 +3,17 @@ namespace Craft;
 
 class FormBuilder_FormRecord extends BaseRecord
 {
-	/**
-	 * @return string
-	 */
+	//======================================================================
+	// Get Table Name
+	//======================================================================
 	public function getTableName()
 	{
 		return 'formbuilder_forms';
 	}
 
-	/**
-	 * @access protected
-	 * @return array
-	 */
+	//======================================================================
+	// Define Attributes
+	//======================================================================
 	protected function defineAttributes()
 	{
 		return array(
@@ -26,17 +25,17 @@ class FormBuilder_FormRecord extends BaseRecord
 			'errorMessage'       									=> AttributeType::String,
 			'toEmail'       											=> AttributeType::Name,
 			'notifyFormAdmin'       							=> AttributeType::Bool,
-			'notificationTemplatePath'						=> array(AttributeType::String, 'required' => true),
+			'notificationTemplatePath'						=> AttributeType::String,
 			'notifyRegistrant'       							=> AttributeType::Bool,
 			'notificationFieldHandleName'					=> AttributeType::String,
-			'notificationTemplatePathRegistrant'	=> array(AttributeType::String, 'required' => true),
+			'notificationTemplatePathRegistrant'	=> AttributeType::String,
 			'fieldLayoutId' 											=> AttributeType::Number
 		);
 	}
 
-	/**
-	 * @return array
-	 */
+	//======================================================================
+	// Define Relationships
+	//======================================================================
 	public function defineRelations()
 	{
 		return array(
@@ -45,9 +44,9 @@ class FormBuilder_FormRecord extends BaseRecord
 		);
 	}
 
-	/**
-	 * @return array
-	 */
+	//======================================================================
+	// Define Indexes
+	//======================================================================
 	public function defineIndexes()
 	{
 		return array(
@@ -56,9 +55,9 @@ class FormBuilder_FormRecord extends BaseRecord
 		);
 	}
 
-	/**
-	 * @return array
-	 */
+	//======================================================================
+	// Scopes
+	//======================================================================
 	public function scopes()
 	{
 		return array(

@@ -1,51 +1,28 @@
 <?php
 namespace Craft;
 
-/**
- * Class RadioButtonsFieldType
- *
- * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
- * @package   craft.app.fieldtypes
- * @since     1.0
- */
 class FormBuilder_RadioButtonsFieldType extends BaseOptionsFieldType
 {
-  // Public Methods
-  // =========================================================================
-
-  /**
-   * @inheritDoc IComponentType::getName()
-   *
-   * @return string
-   */
+  //======================================================================
+  // Get FieldType Name
+  //======================================================================
   public function getName()
   {
     return Craft::t('| FormBuilder | Radio Buttons');
   }
 
-  /**
-   * @inheritDoc IFieldType::getInputHtml()
-   *
-   * @param string $name
-   * @param mixed  $value
-   *
-   * @return string
-   */
+ //======================================================================
+  // Get Input HTML
+  //======================================================================
   public function getInputHtml($name, $value)
   {
-    // Variables
     $fieldId      = $name->id;
     $required     = $name->required;
     $options      = $this->getTranslatedOptions();
     $instructions = $name->instructions;
     
-    // Namespace our field id
     $id = craft()->templates->namespaceInputId($fieldId, 'field');
 
-    // If this is a new entry, look for a default option
     if ($this->isFresh()) {
       $value = $this->getDefaultValue();
     }
@@ -64,14 +41,9 @@ class FormBuilder_RadioButtonsFieldType extends BaseOptionsFieldType
     return $html;
   }
 
-  // Protected Methods
-  // =========================================================================
-
-  /**
-   * @inheritDoc BaseOptionsFieldType::getOptionsSettingsLabel()
-   *
-   * @return string
-   */
+  //======================================================================
+  // Get Settings Label
+  //======================================================================
   protected function getOptionsSettingsLabel()
   {
     return Craft::t('Radio Button Options');

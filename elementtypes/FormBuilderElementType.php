@@ -3,11 +3,17 @@ namespace Craft;
 
 class FormBuilderElementType extends BaseElementType
 {
+  //======================================================================
+  // Get ElementType Name
+  //======================================================================
   public function getName()
   {
     return Craft::t('FormBuilder');
   }
 
+  //======================================================================
+  // Get Sources
+  //======================================================================
   public function getSources($context = null)
   {
     $sources = array(
@@ -26,11 +32,9 @@ class FormBuilderElementType extends BaseElementType
     return $sources;
   }
 
-  // public function defineSearchableAttributes()
-  // {
-  //   return array('title', 'id', 'data');
-  // }
-
+  //======================================================================
+  // Define Table Attributes
+  //======================================================================
   public function defineTableAttributes($source = null)
   {
     return array(
@@ -41,13 +45,9 @@ class FormBuilderElementType extends BaseElementType
     );
   }
 
-  /**
-   * Returns the table view HTML for a given attribute.
-   *
-   * @param BaseElementModel $element
-   * @param string $attribute
-   * @return string
-   */
+  //======================================================================
+  // Get Tablet Attribute HTML
+  //======================================================================
   public function getTableAttributeHtml(BaseElementModel $element, $attribute)
   {
     switch ($attribute) {
@@ -61,6 +61,9 @@ class FormBuilderElementType extends BaseElementType
     }
   }
 
+  //======================================================================
+  // Define Criteria Attributes
+  //======================================================================
   public function defineCriteriaAttributes()
   {
     return array(
@@ -69,13 +72,9 @@ class FormBuilderElementType extends BaseElementType
     );
   }
 
-  /**
-   * Modifies an element query targeting elements of this type.
-   *
-   * @param DbCommand $query
-   * @param ElementCriteriaModel $criteria
-   * @return mixed
-   */
+  //======================================================================
+  // Modify Elements Query
+  //======================================================================
   public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
   {
     $query
@@ -87,12 +86,9 @@ class FormBuilderElementType extends BaseElementType
     }
   }
 
-  /**
-   * Populates an element model based on a query result.
-   *
-   * @param array $row
-   * @return array
-   */
+  //======================================================================
+  // Populate Element Model
+  //======================================================================
   public function populateElementModel($row, $normalize = false)
   {
     $entry = FormBuilder_EntryModel::populateModel($row);

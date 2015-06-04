@@ -1,5 +1,5 @@
 {% extends "_layouts/cp" %}
-{% import "_includes/forms" as forms %}
+{% import "formbuilder/_includes/forms" as forms %}
 {% includeCssResource "formbuilder/css/formbuilder.css" %}
 
 {% set selectedTab = '' %}
@@ -101,7 +101,6 @@
 		</div>
 
 		<hr />
-
 		{# NOTIFICATIONS TOGGLE #}
 		<h1 class="notifications-toggle">{{ "Notifications"|t }}</h1>
 		<div id="notifications-container">
@@ -193,6 +192,7 @@
 					name: 'notificationFieldHandleName',
 					options: groupOptions ? groupOptions : '',
 					value: form.notificationFieldHandleName ? form.notificationFieldHandleName : '',
+					errors: form.getErrors('notificationFieldHandleName'),
 					required: true
 				}) }}
 				{% endif %}
@@ -285,6 +285,11 @@
     	$('.notifyEmailTemplate').slideUp()
     }
   });
+
+	{# Toggle If Section Has Error #}
+	if($('.field-error').length >= 1) {
+		$('#notifications-container').slideDown();
+	}
 
 {% endset %}
 {% includeJs notificationJs %}
