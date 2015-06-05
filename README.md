@@ -69,3 +69,4 @@
 # TODO
 
 * Create more fieldtypes (dates, uploads, lightswitches, etc)
+* Add export/import functionality for the entries
