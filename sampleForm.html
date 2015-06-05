@@ -1,88 +1,45 @@
+{#
+ # Contact Form Sample Code
+ # ------------------------
+ #}
+
 {% extends "_layout" %}
 
-{% set form = craft.formBuilder.getFormByHandle('contactForm') %}
+{% set form = craft.formBuilder.getFormByHandle('ENTER YOUR FORM HANDLE HERE') %}
 {% set tabs = form.fieldLayout.getFieldLayout().getTabs() %}
-
-{% import '_includes/forms.twig' as forms %}
+{% set pluginScripts = craft.formBuilder.pluginScripts(form) %}
 
 {% block content %}
+  <h1>{{ entry.title }}</h1>
 
-<div class="container">
-
-{# Error handling #}
-{% if craft.session.hasFlash('error') %}
-  <div class="errors">
-  {% for error in craft.session.getFlash('error').required %}
-    <p class="error">{{ error }}</p>
-  {% endfor %}
-  </div>
-{% endif %}
-
-{# Notice handling #}
-{% if craft.session.hasFlash('notice') %}
-  <p class="notice">{{ craft.session.getFlash('notice') | raw }}</p>
-{% endif %}
-
-{# Success handling #}
-{% if craft.session.hasFlash('success') %}
-  <p class="success">{{ craft.session.getFlash('success') | raw }}</p>
-{% endif %}
-
-<form method="post" accept-charset="utf-8">
-  <input type="hidden" name="action" value="formBuilder/entries/saveFormEntry">
-  <input type="hidden" name="redirect" value="/">
-  <input type="hidden" name="formHandle" value="{{form.handle}}">
-  <input type="hidden" name="formHoneypot" value="">
-  
-
-  {% for tab in tabs %}
-    {% set fields = tab.getFields() %}
+  <form method="post" accept-charset="utf-8" name="{{ form.handle }}" class="formbuilder-form" id="{{ form.handle }}" data-parsley-errors-container=".formbuilder-notification">
+    <input type="hidden" name="action" value="formBuilder/entries/saveFormEntry">
+    <input type="hidden" name="redirect" data-redirect="{{form.successPageRedirect}}" value="{{form.redirectUrl}}">
+    <input type="hidden" name="formHandle" value="{{form.handle}}">
     
-    <fieldset class="{{loop.index}}">
-      <legend>{{ tab.name }}</legend>
+    {% for tab in tabs %}
+      {% set fields = tab.getFields() %}
+      
+      <fieldset class="{{loop.index}}">
+        <legend>{{ tab.name }}</legend>
+        {% for field in fields %}
+          {% set input = craft.formBuilder.getInputHtml(field) %}
+          {{ input | raw }}
+        {% endfor %} 
+      </fieldset>
+    {% endfor %}
+    
+    {# Error/Success Messages #}
+    {% if craft.session.hasFlash('error') or craft.session.hasFlash('success') %}
+      {% if craft.session.hasFlash('error') %}<div class="formbuilder-notification"><p class="error-message">{{ craft.session.getFlash('error') | raw }}<p></div>{% endif %}
+      {% if craft.session.hasFlash('success') %}<div class="formbuilder-notification success"><p class="success-message">{{ craft.session.getFlash('success') | raw }}</p></div>{% endif %}
+    {% else %}
+      <div class="formbuilder-notification"></div>
+    {% endif %}
 
-      {% for field in fields %}
-
-        {# {{ field | inspect }} #}
-
-        {# {%
-          set param = {  
-            label: f.name,  
-            labelClass: f.handle,  
-            size: attribute(f.settings, 'maxLength') is defined ? f.settings['maxLength'] : '',  
-            placeholder: attribute(f.settings, 'placeholder') is defined ? f.settings['placeholder'] : '',  
-            description: f.instructions,
-            fieldid: f.handle,
-            value: '',
-            required: field.required
-          }  
-        %}
-        {{ forms.input('name', f.type, param) }}  #}
-        
-
-
-
-        {% include "_fields/field.twig" with {
-          field: craft.fields.getFieldById(field.fieldId),
-          required: field.required,
-        } only %}
+    <button type="submit">Submit Message</button>
 
 
+  </form>
 
-
-
-      {% endfor %} 
-
-    </fieldset>
-
-  {% endfor %}
-
-
-  <button type="submit">
-    Submit Message
-  </button>
-
-</form>
-
-</div>
 {% endblock %}

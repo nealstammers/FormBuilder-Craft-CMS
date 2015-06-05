@@ -11,6 +11,9 @@ ajaxForm = ->
     notificationContainer.html ''
     e.preventDefault()
     url = '/admin/actions/' + $(this).children('[name=action]').attr('value')
+    redirect = $(this).children('[name=redirect]').attr('data-redirect')
+    redirectUrl = $(this).children('[name=redirect]').attr('value')
+
     # Validate Parsley
     if $(this).parsley().isValid()
       # Get the post data
@@ -18,8 +21,11 @@ ajaxForm = ->
       # Send it to the server
       $.post url, data, (response) ->
         if response.success
-          notificationContainer.html '<p class="success-message">' + response.message + '</p>'
-          theForm[0].reset()
+          if redirect == '1' 
+            window.location.href = redirectUrl
+          else
+            notificationContainer.html '<p class="success-message">' + response.message + '</p>'
+            theForm[0].reset()
         else
           notificationContainer.html '<p class="error-message">' + response.message + '</p>'
 

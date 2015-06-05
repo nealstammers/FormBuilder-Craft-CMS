@@ -21,6 +21,8 @@ class FormBuilder_FormRecord extends BaseRecord
 			'handle'        											=> array(AttributeType::Handle, 'required' => true),
 			'subject'       											=> AttributeType::Name,
 			'ajaxSubmit'       										=> AttributeType::Bool,
+			'successPageRedirect'       					=> AttributeType::Bool,
+			'redirectUrl'       									=> AttributeType::String,
 			'successMessage'       								=> AttributeType::String,
 			'errorMessage'       									=> AttributeType::String,
 			'toEmail'       											=> AttributeType::Name,

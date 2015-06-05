@@ -22,6 +22,8 @@ class FormBuilder_FormModel extends BaseModel
 			'handle'        													=> AttributeType::String,
 			'subject'       													=> AttributeType::String,
 			'ajaxSubmit'       												=> AttributeType::Bool,
+			'successPageRedirect'       							=> AttributeType::Bool,
+			'redirectUrl'       											=> AttributeType::String,
 			'successMessage'       										=> AttributeType::String,
 			'errorMessage'       											=> AttributeType::String,
 			'toEmail'      														=> AttributeType::String,

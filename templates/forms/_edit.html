@@ -19,7 +19,7 @@
 
 		<h1 class="settings-toggle">{{ "Form Settings"|t }}</h1>
 		<div id="settings-container">
-		<div class="fieldset">
+		<div class="fieldset settings">
 		{{ forms.textField({
 			first: true,
 			label: "Form Name"|t,
@@ -46,7 +46,7 @@
 		
 		{{ forms.textField({
 			label: "Email Subject"|t,
-			instructions: "Subject line for email notifications"|t,
+			instructions: "Subject line for email notifications."|t,
 			id: 'subject',
 			class: 'subject',
 			name: 'subject',
@@ -67,6 +67,33 @@
 			required: false
 		}) }}
 
+		{{ forms.checkboxField({
+			label: "Redirect To Success Page?"|t,
+			instructions: "Should user be redirected to success page?"|t,
+			id: 'successPageRedirect',
+			class: 'successPageRedirect',
+			name: 'successPageRedirect',
+			value: 1,
+			checked: form.successPageRedirect,
+			errors: form.getErrors('successPageRedirect'),
+			required: false
+		}) }}
+		
+		<div class="redirectUrlHolder" style="width: 100%;">
+		<div class="fieldset child">
+		{{ forms.textField({
+			label: "Redirect URL"|t,
+			instructions: "Enter url to success page"|t,
+			id: 'redirectUrl',
+			class: 'redirectUrl',
+			name: 'redirectUrl',
+			value: form.redirectUrl,
+			errors: form.getErrors('redirectUrl'),
+			required: false
+		}) }}
+		</div>
+		</div>
+
 		</div>
 		</div>
 
@@ -77,7 +104,7 @@
 			<div class="fieldset">
 			{{ forms.textField({
 				label: "Success Message"|t,
-				instructions: "Please enter success message"|t,
+				instructions: "Please enter success message."|t,
 				id: 'successMessage',
 				class: 'successMessage',
 				name: 'successMessage',
@@ -255,6 +282,19 @@
 		$('#notifications-container').slideToggle()
 	});
 
+	{# Redirect To Success Page #}
+	if($(".successPageRedirect").is(':checked')) {
+		$('.redirectUrlHolder').show()
+	} else {
+		$('.redirectUrlHolder').hide()
+	}
+	$(".successPageRedirect").change(function() {
+	  if(this.checked) {
+	  	$('.redirectUrlHolder').slideDown()
+	  } else {
+	  	$('.redirectUrlHolder').slideUp()
+	  }
+	});
 
 	{# Notify Registrant Toggle #}
 	if($(".notifyRegistrant").is(':checked')) {
@@ -262,7 +302,6 @@
 	} else {
 		$('.registrantEmailTemplate').hide()
 	}
-
   $(".notifyRegistrant").change(function() {
     if(this.checked) {
     	$('.registrantEmailTemplate').slideDown()
@@ -277,7 +316,6 @@
 	} else {
 		$('.notifyEmailTemplate').hide()
 	}
-
   $(".notifyFormAdmin").change(function() {
     if(this.checked) {
     	$('.notifyEmailTemplate').slideDown()

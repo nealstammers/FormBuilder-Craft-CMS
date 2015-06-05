@@ -56,6 +56,8 @@ class FormBuilder_FormsController extends BaseController
 		$form->handle     														= craft()->request->getPost('handle');
 		$form->subject     														= craft()->request->getPost('subject');
 		$form->ajaxSubmit     												= craft()->request->getPost('ajaxSubmit');
+		$form->successPageRedirect     								= craft()->request->getPost('successPageRedirect');
+		$form->redirectUrl     												= craft()->request->getPost('redirectUrl');
 		$form->successMessage     										= craft()->request->getPost('successMessage');
 		$form->errorMessage     											= craft()->request->getPost('errorMessage');
 		$form->notifyFormAdmin     										= craft()->request->getPost('notifyFormAdmin');

@@ -40,15 +40,26 @@ class FormBuilder_EntriesController extends BaseController
   //======================================================================
 	public function actionSaveFormEntry()
 	{
-		$this->requirePostRequest();
-    $this->requireAjaxRequest();
+    $ajax = false;
 
-		$formBuilderHandle = craft()->request->getPost('formHandle');
-		if (!$formBuilderHandle) { throw new HttpException(404);}
+    $formBuilderHandle = craft()->request->getPost('formHandle');
+    if (!$formBuilderHandle) { throw new HttpException(404);}
+    
+    $form = craft()->formBuilder_entries->getFormByHandle($formBuilderHandle);
+    if (!$form) { throw new HttpException(404); }
 
-		$form = craft()->formBuilder_entries->getFormByHandle($formBuilderHandle);
-		if (!$form) { throw new HttpException(404); }
+    $ajaxSubmit = $form->ajaxSubmit;
+    $formRedirect = $form->successPageRedirect;
+    $formRedirectUrl = $form->redirectUrl;
 
+    if ($ajaxSubmit) {
+      $ajax = true;
+      $this->requirePostRequest();
+      $this->requireAjaxRequest();
+    } else {
+      $this->requirePostRequest();
+    }
+    
     $data = craft()->request->getPost();
 
     $postData = $this->_filterPostKeys($data);
@@ -62,12 +73,10 @@ class FormBuilder_EntriesController extends BaseController
     
     if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
-      // Send notification to admin
       if ($form->notifyFormAdmin && $form->toEmail != '') {
         $this->_sendEmailNotification($formBuilderEntry, $form);
       }
 
-      // Send notification to submitter
       if ($form->notifyRegistrant && $form->notificationFieldHandleName != '') {
         $emailField = craft()->fields->getFieldByHandle($form->notificationFieldHandleName);
         $submitterEmail = $formBuilderEntry->data[$emailField->handle];
@@ -80,9 +89,17 @@ class FormBuilder_EntriesController extends BaseController
         $successMessage =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
       }
 
-      $this->returnJson(
-        ['success' => true, 'message' => $successMessage]
-      );
+      if ($ajax) {
+        $this->returnJson(
+          ['success' => true, 'message' => $successMessage]
+        );
+      } else {
+        if ($formRedirect) {
+          $this->redirectToPostedUrl();
+        } else {
+          craft()->userSession->setFlash('success', $successMessage);
+        }
+      }
 
     } else {
       if (!empty($form->errorMessage)) {
@@ -91,9 +108,17 @@ class FormBuilder_EntriesController extends BaseController
         $errorMessage =  Craft::t('We\'re sorry, but something has gone wrong.');
       }
 
-      $this->returnJson(
-        ['error' => true, 'message' => $errorMessage]
-      );
+      if ($ajax) {
+        $this->returnJson(
+          ['error' => true, 'message' => $errorMessage]
+        );
+      } else {
+        if ($formRedirect) {
+          $this->redirectToPostedUrl();
+        } else {
+          craft()->userSession->setFlash('error', $errorMessage);
+        }
+      }
     }
 	}
 
@@ -184,7 +209,7 @@ class FormBuilder_EntriesController extends BaseController
 	protected function _filterPostKeys($post)
 	{
 		$filterKeys = array(
-			'action',
+      'action',
 			'redirect',
       'formhandle'
 		);

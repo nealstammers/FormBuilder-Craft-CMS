@@ -31,6 +31,7 @@ class FormBuilder_EmailFieldType extends BaseFieldType
     $fieldId      = $name->id;
     $required     = $name->required;
     $instructions = $name->instructions;
+    $placeholder  = $name->settings['placeholder'];
 
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
@@ -39,6 +40,7 @@ class FormBuilder_EmailFieldType extends BaseFieldType
       'id'            => $id,
       'name'          => $name,
       'instructions'  => $instructions,
+      'placeholder'   => $placeholder,
       'value'         => $value,
       'required'      => $required,
       'settings'      => $this->getSettings()
