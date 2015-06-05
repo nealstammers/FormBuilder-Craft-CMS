@@ -7,7 +7,7 @@
 
 ***
 
-**Note** - I have updated a lot of the code so if you have already been using this pluging you'll need to uninstall it first and install this one. Sorry, but there were a lot of changes and creating db migrations was not an option. 
+**Note** - I have updated a lot of the code so if you have already been using this pluging you'll need to uninstall it first and install it again. Sorry, but there were a lot of changes and creating db migrations was not an option. 
 
 # Installation
 
