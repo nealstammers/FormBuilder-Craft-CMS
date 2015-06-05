@@ -38,7 +38,7 @@
     **Redirect To Success Page** - Check if you want to redirect to a success page (ex: "/thank-you")<br />
     **Redirect URL** - Enter url to a success page<br />
     
-  * ##### Form Settings
+  * ##### Messages
     **Success Message** - Enter success message for form submissions<br />
     **Error Message** - Enter error message for form submissions<br />
     
