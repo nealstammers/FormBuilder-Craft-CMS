@@ -3,20 +3,29 @@ namespace Craft;
 
 class FormBuilder_EntryRecord extends BaseRecord
 {
+  //======================================================================
+  // Get Tablet Name
+  //======================================================================
   public function getTableName()
   {
     return 'formbuilder_entries';
   }
 
+  //======================================================================
+  // Define Attributes
+  //======================================================================
   public function defineAttributes()
   {
     return array(
       'formId' => AttributeType::Number,
       'title'  => AttributeType::String,
-      'data'   => AttributeType::Mixed,
+      'data'   => AttributeType::String,
     );
   }
 
+  //======================================================================
+  // Define Relationships
+  //======================================================================
   public function defineRelations()
   {
     return array(

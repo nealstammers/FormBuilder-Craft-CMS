@@ -3,35 +3,41 @@ namespace Craft;
 
 class FormBuilder_FormRecord extends BaseRecord
 {
-	/**
-	 * @return string
-	 */
+	//======================================================================
+	// Get Table Name
+	//======================================================================
 	public function getTableName()
 	{
 		return 'formbuilder_forms';
 	}
 
-	/**
-	 * @access protected
-	 * @return array
-	 */
+	//======================================================================
+	// Define Attributes
+	//======================================================================
 	protected function defineAttributes()
 	{
 		return array(
 			'name'          											=> array(AttributeType::Name, 'required' => true),
 			'handle'        											=> array(AttributeType::Handle, 'required' => true),
-			'toEmail'       											=> array(AttributeType::Name, 'required' => true),
-			'subject'       											=> array(AttributeType::Name),
-			'notifyRegistrant'       							=> array(AttributeType::Bool),
+			'subject'       											=> AttributeType::Name,
+			'ajaxSubmit'       										=> AttributeType::Bool,
+			'successPageRedirect'       					=> AttributeType::Bool,
+			'redirectUrl'       									=> AttributeType::String,
+			'successMessage'       								=> AttributeType::String,
+			'errorMessage'       									=> AttributeType::String,
+			'toEmail'       											=> AttributeType::Name,
+			'notifyFormAdmin'       							=> AttributeType::Bool,
+			'notificationTemplatePath'						=> AttributeType::String,
+			'notifyRegistrant'       							=> AttributeType::Bool,
+			'notificationFieldHandleName'					=> AttributeType::String,
 			'notificationTemplatePathRegistrant'	=> AttributeType::String,
-			'notificationTemplatePath'						=> array(AttributeType::String, 'required' => true),
-			'fieldLayoutId' 											=> AttributeType::Number,
+			'fieldLayoutId' 											=> AttributeType::Number
 		);
 	}
 
-	/**
-	 * @return array
-	 */
+	//======================================================================
+	// Define Relationships
+	//======================================================================
 	public function defineRelations()
 	{
 		return array(
@@ -40,9 +46,9 @@ class FormBuilder_FormRecord extends BaseRecord
 		);
 	}
 
-	/**
-	 * @return array
-	 */
+	//======================================================================
+	// Define Indexes
+	//======================================================================
 	public function defineIndexes()
 	{
 		return array(
@@ -51,9 +57,9 @@ class FormBuilder_FormRecord extends BaseRecord
 		);
 	}
 
-	/**
-	 * @return array
-	 */
+	//======================================================================
+	// Scopes
+	//======================================================================
 	public function scopes()
 	{
 		return array(

@@ -4,33 +4,27 @@ namespace Craft;
 class FormBuilder_EntriesService extends BaseApplicationComponent
 {
 
-	/**
-	 * 
-	 * Gell all entries
-	 * 
-	 */
+	//======================================================================
+	// Get All Entries
+	//======================================================================
 	public function getAllEntries()
 	{
 		$entries = FormBuilder_EntryRecord::model()->findAll();
 		return $entries;
 	}
 
-	/**
-	 * 
-	 * Gell all forms
-	 * 
-	 */
+	//======================================================================
+	// Get All Forms
+	//======================================================================
 	public function getAllForms()
 	{
 		$forms = FormBuilder_FormRecord::model()->findAll();
 		return $forms;
 	}
 
-	/**
-	 * 
-	 * Get forms by handle name
-	 * 
-	 */
+	//======================================================================
+	// Get Form By Handle Name
+	//======================================================================
 	public function getFormByHandle($handle)
 	{
 		$formRecord = FormBuilder_FormRecord::model()->findByAttributes(array(
@@ -41,29 +35,24 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		return FormBuilder_FormModel::populateModel($formRecord);
 	}
 
-	/**
-	 * 
-	 * Get entry by id
-	 * 
-	 */
+	//======================================================================
+	// Get Form Entry By ID
+	//======================================================================
 	public function getFormEntryById($id)
 	{
 		return craft()->elements->getElementById($id, 'FormBuilder');
 	}
 
-	/**
-	 * 
-	 * Save Form Entry
-	 * 
-	 */
+	//======================================================================
+	// Save Form Entry
+	//======================================================================
 	public function saveFormEntry(FormBuilder_EntryModel $entry)
 	{
 		$entryRecord = new FormBuilder_EntryRecord();
 
-		// Set attributes
-		$entryRecord->formId = $entry->formId;
-		$entryRecord->title = $entry->title;
-		$entryRecord->data   = $entry->data;
+		$entryRecord->formId 	= $entry->formId;
+		$entryRecord->title 	= $entry->title;
+		$entryRecord->data   	= $entry->data;
 
 		$entryRecord->validate();
 		$entry->addErrors($entryRecord->getErrors());
@@ -86,29 +75,21 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		}	else { return false; }
 	}
 
-	/**
-	 * 
-	 * Send Email notification
-	 * 
-	 */
+	//======================================================================
+  // Send Email Notification to Admin
+  //======================================================================
 	public function sendEmailNotification($form, $message, $html = true, $email = null)
 	{	
-
-		// Generic errors bool
 		$errors = false;
-
 		$email = new EmailModel();
 
-		// $email->fromEmail = $form->fromEmail;
-		$email->replyTo   = $form->yourEmail;
-		// $email->sender    = $form->fromEmail;
-		$email->fromName  = 'FormBuilder Plugin';
+		$email->toEmail		= $form->toEmail;
+		$email->replyTo   = $form->toEmail;
+		$email->fromName  = craft()->getSiteName() . ' | Submission Notification';
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
 
-		// Support for sending multiple emails
 		$emailTo = explode(',', $form->toEmail);
-
 		foreach ($emailTo as $emailAddress) {
 			$email->toEmail = trim($emailAddress);
 			if (!craft()->email->sendEmail($email)) {
@@ -118,24 +99,20 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		return $errors ? false : true;
 	}
 
-	/**
-	 * 
-	 * Send Email notification to registrant
-	 * 
-	 */
-	public function sendRegistrantEmailNotification($form, $message, $html = true, $email = null)
+	//======================================================================
+  // Send Email Notification to Submitter
+  //======================================================================
+	public function sendRegistrantEmailNotification($form, $message, $submitterEmail, $html = true, $email = null)
 	{
-		// Generic errors bool
 		$errors = false;
+		$email = new EmailModel();
 
-		// If form sending to multiple emails, only first one will be picked as the replyTo/fromEmail
 		$emailTo = explode(',', $form->toEmail);
 
-		$email = new EmailModel();
-		$email->toEmail   = $form->yourEmail;
+		$email->toEmail   = $submitterEmail;
 		$email->fromEmail = $emailTo[0];
 		$email->replyTo   = $emailTo[0];
-		$email->fromName  = 'Submission Notification';
+		$email->fromName  = craft()->getSiteName() . ' | Submission Notification';
 		$email->subject   = $form->subject;
 		$email->htmlBody  = $message;
 
@@ -144,4 +121,5 @@ class FormBuilder_EntriesService extends BaseApplicationComponent
 		}
 		return $errors ? false : true;
 	}
+
 }

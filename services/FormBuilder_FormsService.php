@@ -2,16 +2,15 @@
 namespace Craft;
 
 class FormBuilder_FormsService extends BaseApplicationComponent
-{
+{	
+	public $types;
 	private $_allFormIds;
 	private $_formsById;
 	private $_fetchedAllForms = false;
 
-	/**
-	 * Returns all of the form IDs.
-	 *
-	 * @return array
-	 */
+	//======================================================================
+	// Get All Form ID's
+	//======================================================================
 	public function getAllFormIds()
 	{
 		if (!isset($this->_allFormIds)) {
@@ -27,12 +26,9 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		return $this->_allFormIds;
 	}
 
-	/**
-	 * Returns all forms.
-	 *
-	 * @param string|null $indexBy
-	 * @return array
-	 */
+	//======================================================================
+	// Get All Forms
+	//======================================================================
 	public function getAllForms($indexBy = null)
 	{
 		if (!$this->_fetchedAllForms) {
@@ -54,22 +50,17 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		}
 	}
 
-	/**
-	 * Gets the total number of forms.
-	 *
-	 * @return int
-	 */
+	//======================================================================
+	// Get Total Forms Count
+	//======================================================================
 	public function getTotalForms()
 	{
 		return count($this->getAllFormIds());
 	}
 
-	/**
-	 * Returns a form by its ID.
-	 *
-	 * @param $formId
-	 * @return FormBuilder_FormModel|null
-	 */
+	//======================================================================
+	// Get Form By ID
+	//======================================================================
 	public function getFormById($formId)
 	{
 		if (!isset($this->_formsById) || !array_key_exists($formId, $this->_formsById)) {
@@ -84,12 +75,9 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		return $this->_formsById[$formId];
 	}
 
-	/**
-	 * Gets a form by its handle.
-	 *
-	 * @param string $formHandle
-	 * @return FormBuilder_FormModel|null
-	 */
+	//======================================================================
+	// Get Form By Handle
+	//======================================================================
 	public function getFormByHandle($formHandle)
 	{
 		$formRecord = FormBuilder_FormRecord::model()->findByAttributes(array(
@@ -101,13 +89,9 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		}
 	}
 
-	/**
-	 * Saves a form.
-	 *
-	 * @param FormBuilder_FormModel $form
-	 * @throws \Exception
-	 * @return bool
-	 */
+	//======================================================================
+	// Save Form
+	//======================================================================
 	public function saveForm(FormBuilder_FormModel $form)
 	{
 		if ($form->id) {
@@ -126,38 +110,53 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 
 		$formRecord->name       													= $form->name;
 		$formRecord->handle     													= $form->handle;
-		$formRecord->toEmail    													= $form->toEmail;
 		$formRecord->subject    													= $form->subject;
+		$formRecord->ajaxSubmit    												= $form->ajaxSubmit;
+		$formRecord->successPageRedirect    							= $form->successPageRedirect;
+		$formRecord->redirectUrl    											= $form->redirectUrl;
+		$formRecord->successMessage    										= $form->successMessage;
+		$formRecord->errorMessage    											= $form->errorMessage;
+		$formRecord->notifyFormAdmin     									= $form->notifyFormAdmin;
+		$formRecord->toEmail    													= $form->toEmail;
+		$formRecord->notificationTemplatePath							= $form->notificationTemplatePath;
 		$formRecord->notifyRegistrant    									= $form->notifyRegistrant;
 		$formRecord->notificationTemplatePathRegistrant		= $form->notificationTemplatePathRegistrant;
-		$formRecord->notificationTemplatePath							= $form->notificationTemplatePath;
+		$formRecord->notificationFieldHandleName					= $form->notificationFieldHandleName;
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
+
+		$emailField = craft()->fields->getFieldByHandle(craft()->request->getPost('notificationFieldHandleName'));
+
+		if ($form->notifyRegistrant) {
+			if ($emailField) {
+				if ($emailField->type != 'FormBuilder_Email') {
+					$form->addError('notificationFieldHandleName', 'Must be an email fieldtype.');
+					return false;
+				}
+			} else {
+				$form->addError('notificationFieldHandleName', 'Please select an email field.');
+				return false;
+			}
+		}
 
 		if (!$form->hasErrors()) {
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try	{
 				if (!$isNewForm && $oldForm->fieldLayoutId) {
-					// Drop the old field layout
 					craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
 				}
 
-				// Save the new one
 				$fieldLayout = $form->getFieldLayout();
 				craft()->fields->saveLayout($fieldLayout);
 
-				// Update the form record/model with the new layout ID
 				$form->fieldLayoutId = $fieldLayout->id;
 				$formRecord->fieldLayoutId = $fieldLayout->id;
 
-				// Save it!
 				$formRecord->save();
 
-				// Now that we have a form ID, save it on the model
 				if (!$form->id) {	$form->id = $formRecord->id; }
 
-				// Might as well update our cache of the form while we have it.
 				$this->_formsById[$form->id] = $form;
 
 				if ($transaction !== null) { $transaction->commit(); }
@@ -166,24 +165,20 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 				throw $e;
 			}
 			return true;
-		} else { return false; }
+		} else { 
+			return false; 
+		}
 	}
 
-	/**
-	 * Deletes a form by its ID.
-	 *
-	 * @param int $formId
-	 * @throws \Exception
-	 * @return bool
-	 */
+	//======================================================================
+	// Delete Form By ID
+	//======================================================================
 	public function deleteFormById($formId)
 	{	
-		
 		if (!$formId) { return false; }
 
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 		try {
-			// Delete the field layout
 			$fieldLayoutId = craft()->db->createCommand()
 				->select('fieldLayoutId')
 				->from('formbuilder_forms')
@@ -194,7 +189,6 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 				craft()->fields->deleteLayoutById($fieldLayoutId);
 			}
 
-			// Grab the entry ids so we can clean the elements table.
 			$entryIds = craft()->db->createCommand()
 				->select('id')
 				->from('formbuilder_entries')
