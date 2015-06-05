@@ -23,6 +23,7 @@ class FormBuilder_FormRecord extends BaseRecord
 			'ajaxSubmit'       										=> AttributeType::Bool,
 			'successPageRedirect'       					=> AttributeType::Bool,
 			'redirectUrl'       									=> AttributeType::String,
+			'useReCaptcha'       									=> AttributeType::Bool,
 			'successMessage'       								=> AttributeType::String,
 			'errorMessage'       									=> AttributeType::String,
 			'toEmail'       											=> AttributeType::Name,

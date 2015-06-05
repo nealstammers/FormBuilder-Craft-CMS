@@ -114,6 +114,7 @@ class FormBuilder_FormsService extends BaseApplicationComponent
 		$formRecord->ajaxSubmit    												= $form->ajaxSubmit;
 		$formRecord->successPageRedirect    							= $form->successPageRedirect;
 		$formRecord->redirectUrl    											= $form->redirectUrl;
+		$formRecord->useReCaptcha    											= $form->useReCaptcha;
 		$formRecord->successMessage    										= $form->successMessage;
 		$formRecord->errorMessage    											= $form->errorMessage;
 		$formRecord->notifyFormAdmin     									= $form->notifyFormAdmin;

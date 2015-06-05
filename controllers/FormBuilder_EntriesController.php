@@ -70,8 +70,21 @@ class FormBuilder_EntriesController extends BaseController
     $formBuilderEntry->title      = $form->name;
     $formBuilderEntry->data       = $postData;
 
-    
-    if (craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
+    // Use reCaptcha
+    $useCaptcha = $form->useReCaptcha;
+    if ($useCaptcha) {
+      $captchaPlugin = craft()->plugins->getPlugin('recaptcha');
+      if ($captchaPlugin && $captchaPlugin->isEnabled) {
+        $captcha = craft()->request->getPost('g-recaptcha-response');
+        $verified = craft()->recaptcha_verify->verify($captcha);
+      } else {
+        $verified = true;
+      }
+    } else {
+      $verified = true;
+    }
+
+    if ($verified && craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
 
       if ($form->notifyFormAdmin && $form->toEmail != '') {
         $this->_sendEmailNotification($formBuilderEntry, $form);
@@ -102,6 +115,12 @@ class FormBuilder_EntriesController extends BaseController
       }
 
     } else {
+
+      if (!$verified) {
+        craft()->userSession->setFlash('error', 'Please check captcha!');
+        $this->redirectToPostedUrl();
+      } 
+
       if (!empty($form->errorMessage)) {
         $errorMessage = $form->errorMessage;
       } else {
@@ -210,7 +229,8 @@ class FormBuilder_EntriesController extends BaseController
 	{
 		$filterKeys = array(
       'action',
-			'redirect',
+      'redirect',
+			'g-recaptcha-response',
       'formhandle'
 		);
 		if (is_array($post)) {

@@ -93,6 +93,18 @@
 		</div>
 		</div>
 
+		{{ forms.checkboxField({
+			label: "Use reCaptcha?"|t,
+			instructions: "Would you like to use Google reCaptcha? Requires this following plugin to be installed: <a href=\"https://github.com/aberkie/craft-recaptcha/\" target=\"_blank\">Craft reCaptcha</a>"|t,
+			id: 'useReCaptcha',
+			class: 'useReCaptcha',
+			name: 'useReCaptcha',
+			value: 1,
+			checked: form.useReCaptcha,
+			errors: form.getErrors('useReCaptcha'),
+			required: false
+		}) }}
+
 		</div>
 		</div>
 
