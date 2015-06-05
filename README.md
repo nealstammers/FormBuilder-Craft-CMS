@@ -21,7 +21,7 @@
 
 # Create Fields
 
-* Got to `settings/fields` and hit `+ New Field`
+* Got to `/settings/fields` and hit `+ New Field`
 * Fill out the field's information. Make sure to use `| FormBuilder |` fields only.
 
 # Create Form
@@ -51,7 +51,7 @@
   
   * ##### Fields
     **Fieldsets** - You can create many fieldsets by hitting `+ Add Fieldset`<br />
-    **Create New Field** - This will redirect you to `settings/fields` where you can create a new field
+    **Create New Field** - This will redirect you to `/settings/fields` where you can create a new field
 
 
 # Required Fields
