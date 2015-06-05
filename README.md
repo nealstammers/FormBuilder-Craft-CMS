@@ -34,6 +34,7 @@
     **Hand** - Will be generated automatically<br />
     **Email Subje** - This will be subject line for email notifications<br />
     **Use AJAX?** - Check this if you want the form submission via ajax, this will use javascript to validate `required` fields<br />
+    **Use reCaptcha?** - Check this if you want to use Google reCaptcha. Requires this following plugin to be installed: [Craft reCaptcha](https://github.com/aberkie/craft-recaptcha/) <br />
     **Redirect To Success Page** - Check if you want to redirect to a success page (ex: "/thank-you")<br />
     **Redirect URL** - Enter url to a success page<br />
     
@@ -56,6 +57,13 @@
 # Required Fields
 
 * If you want to make required fields you can do that by clicking on the "cog" icon in the Fields section. This will add HTML5 "required" attribute to the input field. If your form uses Ajax to post submissions, javascript will validate those fields (using Parsleyjs). [See Screenshot](http://vadim-dev.s3.amazonaws.com/formbuilder/1.4.png)
+
+# reCaptcha
+
+* Go to `https://github.com/aberkie/craft-recaptcha/` and follow installation instructions.
+* Add this `{{craft.recaptcha.render()}}` anywhere inside your form on the front-end.
+* Check `Use reCaptcha?` in the Form Settings section
+
 
 
 # TODO
