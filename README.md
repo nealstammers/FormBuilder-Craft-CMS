@@ -21,7 +21,7 @@
 
 # Create Fields
 
-* Got to Settings->Fields and hit `+ New Field`
+* Got to `settings/fields` and hit `+ New Field`
 * Fill out the field's information. Make sure to use `| FormBuilder |` fields only.
 
 # Create Form
@@ -50,8 +50,8 @@
     **Notification Field** - Path where the email template lives. *You must first add some fields to the fields section and save the form for this to show up. Also this field requires `| FormBuilder | Email Address` fieldtype to be used.*<br />
   
   * ##### Fields
-    **Fieldsets** - You can create many fieldsets by hitting `Add Fieldset`<br />
-    **Create New Field** - This will redirect you to `settings->fields` where you can create a new field
+    **Fieldsets** - You can create many fieldsets by hitting `+ Add Fieldset`<br />
+    **Create New Field** - This will redirect you to `settings/fields` where you can create a new field
 
 
 # Required Fields
