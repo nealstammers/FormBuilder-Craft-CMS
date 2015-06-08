@@ -41,6 +41,7 @@ class FormBuilder_EntriesController extends BaseController
 	public function actionSaveFormEntry()
 	{
     $ajax = false;
+    $redirect = false;
 
     $formBuilderHandle = craft()->request->getPost('formHandle');
     if (!$formBuilderHandle) { throw new HttpException(404);}
@@ -61,9 +62,7 @@ class FormBuilder_EntriesController extends BaseController
     }
     
     $data = craft()->request->getPost();
-
     $postData = $this->_filterPostKeys($data);
-
     $formBuilderEntry = new FormBuilder_EntryModel();
 
     $formBuilderEntry->formId     = $form->id;
@@ -78,7 +77,7 @@ class FormBuilder_EntriesController extends BaseController
         $captcha = craft()->request->getPost('g-recaptcha-response');
         $verified = craft()->recaptcha_verify->verify($captcha);
       } else {
-        $verified = true;
+        $verified = false;
       }
     } else {
       $verified = true;
@@ -101,6 +100,7 @@ class FormBuilder_EntriesController extends BaseController
       } else {
         $successMessage =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
       }
+      craft()->userSession->setFlash('success', $successMessage);
 
       if ($ajax) {
         $this->returnJson(
@@ -108,15 +108,16 @@ class FormBuilder_EntriesController extends BaseController
         );
       } else {
         if ($formRedirect) {
-          $this->redirectToPostedUrl();
-        } else {
-          craft()->userSession->setFlash('success', $successMessage);
+          $this->redirect($formRedirectUrl);
         }
       }
-
+      
     } else {
-
       if (!$verified) {
+        if (!$captchaPlugin) {
+          craft()->userSession->setFlash('error', 'Please enable reCaptcha plugin!');
+          $this->redirectToPostedUrl();
+        }
         craft()->userSession->setFlash('error', 'Please check captcha!');
         $this->redirectToPostedUrl();
       } 
@@ -139,6 +140,7 @@ class FormBuilder_EntriesController extends BaseController
         }
       }
     }
+
 	}
 
 	//======================================================================
@@ -229,7 +231,7 @@ class FormBuilder_EntriesController extends BaseController
 	{
 		$filterKeys = array(
       'action',
-      'redirect',
+      'formredirect',
 			'g-recaptcha-response',
       'formhandle'
 		);
