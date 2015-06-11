@@ -6,6 +6,11 @@ class FormBuilder_EntriesController extends BaseController
 	protected $allowAnonymous = true;
   protected $defaultEmailTemplate = 'formbuilder/email/default';
 	protected $defaultRegistrantEmailTemplate = 'formbuilder/email/registrant';
+
+
+  protected $valid_extensions = array('image', 'compressed');
+  protected $assetSourceId = 3;
+  protected $assetFolderId = 5;
 	
 	//======================================================================
   // View All Entries
@@ -64,6 +69,40 @@ class FormBuilder_EntriesController extends BaseController
     $data = craft()->request->getPost();
     $postData = $this->_filterPostKeys($data);
     $formBuilderEntry = new FormBuilder_EntryModel();
+    
+    //
+    // File Uploads
+    //
+    $fileupload = true;
+    $validExtension = false;
+    if (isset(array_values($_FILES)[0])) {
+      $filename = array_values($_FILES)[0]['name'];
+      $file = array_values($_FILES)[0]['tmp_name'];
+      $extension = IOHelper::getFileKind(IOHelper::getExtension($filename));
+
+      if (!in_array($extension, $this->valid_extensions)) {
+        $fileupload = false;
+        $validExtension = false;
+      } else {
+        $validExtension = true;
+      }
+
+      if ($validExtension) {
+        // Create formbuilder directory inside craft/storage if one doesn't exist
+        $storagePath = craft()->path->getStoragePath();
+        $myStoragePath = $storagePath . 'formbuilder/';
+        IOHelper::ensureFolderExists($myStoragePath);
+        $uploadDir = $myStoragePath;
+
+        // Rename each file with unique name
+        $uniqe_filename = uniqid() . '-' . $filename;
+        
+        foreach ($_FILES as $key => $value) {
+          $fileUploadHandle = $key;
+        }
+        $postData[$fileUploadHandle] = $uniqe_filename;
+      }
+    }
 
     $formBuilderEntry->formId     = $form->id;
     $formBuilderEntry->title      = $form->name;
@@ -83,7 +122,48 @@ class FormBuilder_EntriesController extends BaseController
       $verified = true;
     }
 
-    if ($verified && craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
+
+
+    // Save Form Entry
+    if ($verified && $fileupload && craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
+
+      // Save Uploaded File
+      if ($validExtension) {
+        if (move_uploaded_file($file, $uploadDir . $uniqe_filename)) {
+          IOHelper::deleteFile($file);
+
+          $file = $uploadDir . $uniqe_filename;
+
+          $fileModel = new AssetFileModel();
+          $fileModel->sourceId = $this->assetSourceId;
+          $fileModel->folderId = $this->assetFolderId;
+          $fileModel->filename = IOHelper::getFileName($uniqe_filename);
+          $fileModel->originalName = IOHelper::getFileName($filename);
+          $fileModel->kind = IOHelper::getFileKind(IOHelper::getExtension($uniqe_filename));
+          $fileModel->size = filesize($file);
+          $fileModel->dateModified = IOHelper::getLastTimeModified($file);
+
+          if ($fileModel->kind == 'image') {
+            list ($width, $height) = ImageHelper::getImageSize($file);
+            $fileModel->width = $width;
+            $fileModel->height = $height;
+          }
+
+          craft()->assets->storeFile($fileModel);
+
+        } else {
+          $fileupload = false;
+        }
+
+        // var_dump($uniqe_filename);
+        // var_dump($uploadDir);
+        // var_dump($filename);
+        // var_dump($file);
+        // var_dump($extension);
+        // var_dump($fileupload);
+
+      } // Valid extension
+
 
       if ($form->notifyFormAdmin && $form->toEmail != '') {
         $this->_sendEmailNotification($formBuilderEntry, $form);
