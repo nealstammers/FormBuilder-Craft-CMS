@@ -122,7 +122,9 @@ class FormBuilder_EntriesController extends BaseController
       $verified = true;
     }
 
-
+    $sourceTypes = craft()->assetSources->getSourceTypeById(3);
+    var_dump($sourceTypes);
+    die();
 
     // Save Form Entry
     if ($verified && $fileupload && craft()->formBuilder_entries->saveFormEntry($formBuilderEntry)) {
@@ -135,8 +137,10 @@ class FormBuilder_EntriesController extends BaseController
           $file = $uploadDir . $uniqe_filename;
 
           $fileModel = new AssetFileModel();
-          $fileModel->sourceId = $this->assetSourceId;
-          $fileModel->folderId = $this->assetFolderId;
+          // $fileModel->sourceId = $this->assetSourceId;
+          // $fileModel->folderId = $this->assetFolderId;
+          $fileModel->sourceId = null;
+          $fileModel->folderId = null;
           $fileModel->filename = IOHelper::getFileName($uniqe_filename);
           $fileModel->originalName = IOHelper::getFileName($filename);
           $fileModel->kind = IOHelper::getFileKind(IOHelper::getExtension($uniqe_filename));

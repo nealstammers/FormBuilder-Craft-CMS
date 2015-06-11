@@ -105,6 +105,18 @@
 			required: false
 		}) }}
 
+		{{ forms.checkboxField({
+			label: "Has File Uploads?"|t,
+			instructions: "Will this form have file uploads?"|t,
+			id: 'hasFileUploads',
+			class: 'hasFileUploads',
+			name: 'hasFileUploads',
+			value: 1,
+			checked: form.hasFileUploads,
+			errors: form.getErrors('hasFileUploads'),
+			required: false
+		}) }}
+
 		</div>
 		</div>
 
