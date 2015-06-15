@@ -13,7 +13,7 @@ class m150614_193116_formbuilder_AddUploadSourceColumn extends BaseMigration
 	 */
 	public function safeUp()
 	{
-    $this->addColumn('formbuilder_forms', 'uploadSource', ColumnType::Varchar);
+		$this->addColumnAfter('formbuilder_forms', 'uploadSource', array(ColumnType::Varchar, 'required' => false, 'length' => 255), 'hasFileUploads');
 		return true;
 	}
 }

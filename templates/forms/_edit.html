@@ -121,7 +121,7 @@
 			{% set sources = craft.formBuilder.getAllAssetSources() %}
 			{% set sourceOptions = [{label: 'Select Asset Source', value: ''}] %}
 			{% for source in sources %}
-				{% set sourceOptions = sourceOptions|merge([{ label: source.name, value: source.handle }]) %}
+				{% set sourceOptions = sourceOptions|merge([{ label: source.name, value: source.id }]) %}
 			{% endfor %}
 			<div class="fieldset child">
 			{{ forms.selectField ({

@@ -14,7 +14,6 @@ class m150614_182036_formbuilder_AddHasFileUploadsFieldColumn extends BaseMigrat
 	public function safeUp()
 	{
     $this->addColumnAfter('formbuilder_forms', 'hasFileUploads', array(ColumnType::TinyInt, 'required' => false, 'length' => 1), 'useReCaptcha');
-
     return true;
 	}
 }
