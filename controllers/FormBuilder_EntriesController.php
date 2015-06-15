@@ -8,7 +8,7 @@ class FormBuilder_EntriesController extends BaseController
 	protected $defaultRegistrantEmailTemplate = 'formbuilder/email/registrant';
 
 
-  protected $valid_extensions = array('image', 'compressed');
+  protected $valid_extensions = array('image', 'compressed', 'excel', 'html', 'illustrator', 'json', 'pdf', 'photoshop', 'powerpoint', 'text', 'video', 'word', 'xml');
   protected $assetFolderId = 1;
 	
 	//======================================================================
