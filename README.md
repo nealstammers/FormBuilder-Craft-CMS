@@ -1,7 +1,7 @@
 ![image](http://vadim-dev.s3.amazonaws.com/formbuilder/formBuilder_logo.png)
 
 ![image](https://img.shields.io/badge/version-1.4.1-brightgreen.svg)
-![image](https://img.shields.io/packagist/v/roundhouse/formbuilder.svg)
+[![image](https://img.shields.io/packagist/v/roundhouse/formbuilder.svg)](https://packagist.org/packages/roundhouse/formbuilder)
 [![image](https://img.shields.io/badge/documentation-read-ff69b4.svg)](http://roundhouse.github.io/FormBuilder-Craft-CMS/)
 [![image](https://img.shields.io/github/license/mashape/apistatus.svg)](http://opensource.org/licenses/MIT)
 
