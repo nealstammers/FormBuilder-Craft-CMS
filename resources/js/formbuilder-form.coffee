@@ -6,42 +6,18 @@ ajaxForm = ->
   # Parsleyjs
   theForm.parsley()
 
-  # Prepare File Uploads
-  file = undefined
-  $('input[type=file]').on 'change', (event) ->
-    file = event.target.files
-
   # AJAX Form Submit
   theForm.submit (e) ->
     notificationContainer.html ''
-    e.stopPropagation()
     e.preventDefault()
-
-    # Variables
-    url = '/admin/actions/' + $(@).children('[name=action]').attr('value')
-    redirect = $(@).children('[name=formredirect]').attr('data-redirect')
-    redirectUrl = $(@).children('[name=formredirect]').attr('value')
-
-    # Get the post data
-    formData = $(@)[0]
-
-    data = new FormData
-    data.append('message', 'test')
-
-
-    
-    console.log data
-
-    # data = $(@).serialize()
-
+    url = '/admin/actions/' + $(this).children('[name=action]').attr('value')
+    redirect = $(this).children('[name=formredirect]').attr('data-redirect')
+    redirectUrl = $(this).children('[name=formredirect]').attr('value')
 
     # Validate Parsley
-    if $(@).parsley().isValid()
-
-
+    if $(this).parsley().isValid()
       # Get the post data
-      data = data.serialize()
-      
+      data = $(this).serialize()
       # Send it to the server
       $.post url, data, (response) ->
         if response.success

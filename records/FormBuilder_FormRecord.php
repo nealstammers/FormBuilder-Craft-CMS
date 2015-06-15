@@ -25,6 +25,7 @@ class FormBuilder_FormRecord extends BaseRecord
 			'redirectUrl'       									=> AttributeType::String,
 			'useReCaptcha'       									=> AttributeType::Bool,
 			'hasFileUploads'       								=> AttributeType::Bool,
+			'uploadSource'       									=> AttributeType::String,
 			'successMessage'       								=> AttributeType::String,
 			'errorMessage'       									=> AttributeType::String,
 			'toEmail'       											=> AttributeType::Name,

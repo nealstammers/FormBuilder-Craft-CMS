@@ -9,8 +9,8 @@ class FormBuilder_EntriesController extends BaseController
 
 
   protected $valid_extensions = array('image', 'compressed');
-  protected $assetSourceId = 3;
-  protected $assetFolderId = 5;
+  protected $assetSourceId = 1;
+  protected $assetFolderId = 1;
 	
 	//======================================================================
   // View All Entries
@@ -122,7 +122,7 @@ class FormBuilder_EntriesController extends BaseController
       $verified = true;
     }
 
-    $sourceTypes = craft()->assetSources->getSourceTypeById(3);
+    $sourceTypes = craft()->assetSources->allSources;
     var_dump($sourceTypes);
     die();
 
@@ -136,11 +136,12 @@ class FormBuilder_EntriesController extends BaseController
 
           $file = $uploadDir . $uniqe_filename;
 
+
           $fileModel = new AssetFileModel();
-          // $fileModel->sourceId = $this->assetSourceId;
-          // $fileModel->folderId = $this->assetFolderId;
-          $fileModel->sourceId = null;
-          $fileModel->folderId = null;
+          $fileModel->sourceId = $this->assetSourceId;
+          $fileModel->folderId = $this->assetFolderId;
+          // $fileModel->sourceId = null;
+          // $fileModel->folderId = null;
           $fileModel->filename = IOHelper::getFileName($uniqe_filename);
           $fileModel->originalName = IOHelper::getFileName($filename);
           $fileModel->kind = IOHelper::getFileKind(IOHelper::getExtension($uniqe_filename));
@@ -159,12 +160,12 @@ class FormBuilder_EntriesController extends BaseController
           $fileupload = false;
         }
 
-        // var_dump($uniqe_filename);
-        // var_dump($uploadDir);
-        // var_dump($filename);
-        // var_dump($file);
-        // var_dump($extension);
-        // var_dump($fileupload);
+        var_dump($uniqe_filename);
+        var_dump($uploadDir);
+        var_dump($filename);
+        var_dump($file);
+        var_dump($extension);
+        var_dump($fileupload);
 
       } // Valid extension
 

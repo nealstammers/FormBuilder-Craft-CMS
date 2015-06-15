@@ -26,6 +26,7 @@ class FormBuilder_FormModel extends BaseModel
 			'redirectUrl'       											=> AttributeType::String,
 			'useReCaptcha'       											=> AttributeType::Bool,
 			'hasFileUploads'       										=> AttributeType::Bool,
+			'uploadSource'       											=> AttributeType::String,
 			'successMessage'       										=> AttributeType::String,
 			'errorMessage'       											=> AttributeType::String,
 			'toEmail'      														=> AttributeType::String,
