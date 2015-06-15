@@ -1,7 +1,7 @@
 ![image](http://vadim-dev.s3.amazonaws.com/formbuilder/formBuilder_logo.png)
 
 ![image](https://img.shields.io/badge/version-1.4.1-brightgreen.svg)
-[![image](https://img.shields.io/packagist/v/roundhouse/formbuilder.svg)](https://packagist.org/packages/roundhouse/formbuilder)
+![image](https://img.shields.io/packagist/v/roundhouse/formbuilder.svg)
 [![image](https://img.shields.io/badge/documentation-read-ff69b4.svg)](http://roundhouse.github.io/FormBuilder-Craft-CMS/)
 [![image](https://img.shields.io/github/license/mashape/apistatus.svg)](http://opensource.org/licenses/MIT)
 
@@ -95,6 +95,13 @@
 * For `File System Path` please enter `formbuilder`.
 * For `URL` enter `http://yourwebsite.com/craft/storage/`
 * Save!
+
+Now go create a new field `settings/fields`. For `Field Type` make sure to select `| FormBuilder | File Upload`. 
+
+Now go to your form and in the Form Settings section check `Has File Uploads`. A drop down will appear, please select the Asset Source you created earlier [See Screenshot](http://vadim-dev.s3.amazonaws.com/formbuilder/file_upload_example.png). Now go to Fields section and drag the field you created to your form [See Gif](http://vadim-dev.s3.amazonaws.com/formbuilder/dragUploadField.gif). 
+
+Save form.
+
 
 ***
 
