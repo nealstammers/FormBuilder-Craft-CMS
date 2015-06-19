@@ -50,7 +50,7 @@ class FormBuilder_FileUploadFieldType extends BaseFieldType
 
     $id = craft()->templates->namespaceInputId($fieldId, 'field'); 
 
-    craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formBuilder/templates');
+    craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'formbuilder/templates');
     $html = craft()->templates->render('_includes/forms/file', array(
       'id'            => $id,
       'name'          => $name,
