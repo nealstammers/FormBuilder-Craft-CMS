@@ -16,7 +16,7 @@ class m150619_155820_formbuilder_UpdateEntriesDataColumnType extends BaseMigrati
     $this->alterColumn(
       'formbuilder_entries',
       'data',
-      array('column' => ColumnType::Mixed)
+      array('column' => ColumnType::Text)
     );
 
 		return true;
