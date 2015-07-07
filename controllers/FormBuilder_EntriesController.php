@@ -323,7 +323,10 @@ class FormBuilder_EntriesController extends BaseController
             'action',
             'formredirect',
             'g-recaptcha-response',
-            'formhandle'
+            'formhandle',
+            'redirect',
+            'formhoneypot',
+            'required'
         );
         if (is_array($post)) {
             foreach ($post as $k => $v) {
