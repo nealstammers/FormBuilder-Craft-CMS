@@ -126,7 +126,7 @@ class FormBuilder_EntriesController extends BaseController
 
         // Use reCaptcha
         $useCaptcha = $form->useReCaptcha;
-        if ($useCaptcha) {
+        if ($useCaptcha && !DEV_MODE) {
             $captchaPlugin = craft()->plugins->getPlugin('recaptcha');
             if ($captchaPlugin && $captchaPlugin->isEnabled) {
                 $captcha  = craft()->request->getPost('g-recaptcha-response');
