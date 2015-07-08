@@ -72,10 +72,9 @@ class FormBuilder_EntriesController extends BaseController
     $fileupload = true;
     $validExtension = false;
     if ($form->hasFileUploads) {
-      $uploadedFile = array_values($_FILES)[0];
-      if (isset($uploadedFile)) {
-        $filename = $uploadedFile['name'];
-        $file = $uploadedFile['tmp_name'];
+      if (isset(array_values($_FILES)[0])) {
+        $filename = array_values($_FILES)[0]['name'];
+        $file = array_values($_FILES)[0]['tmp_name'];
         $extension = IOHelper::getFileKind(IOHelper::getExtension($filename));
         if (!in_array($extension, $this->valid_extensions)) {
           $fileupload = false;
